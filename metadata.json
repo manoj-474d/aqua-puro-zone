@@ -1,0 +1,8 @@
+{
+  "name": "Aqua Puro Zone",
+  "description": "Tumakuru central water purifier operations dashboard, Snap \u0026 Suggest AI diagnostics hub, inventory management, and customer portal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

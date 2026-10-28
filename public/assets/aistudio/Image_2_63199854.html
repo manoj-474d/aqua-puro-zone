@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#006875","on-primary-fixed-variant":"#00468b","primary-fixed-dim":"#a9c7ff","primary-container":"#0b74de","on-surface":"#131b2e","on-secondary-container":"#006773","error-container":"#ffdad6","on-error":"#ffffff","inverse-surface":"#283044","outline":"#717784","on-tertiary":"#ffffff","surface":"#faf8ff","secondary-container":"#5ee9ff","on-secondary-fixed-variant":"#004f58","secondary-fixed":"#9bf0ff","surface-container-high":"#e2e7ff","secondary-fixed-dim":"#48d8ed","surface-tint":"#005db6","on-tertiary-fixed":"#002109","inverse-primary":"#a9c7ff","primary-fixed":"#d6e3ff","surface-variant":"#dae2fd","outline-variant":"#c1c6d5","background":"#faf8ff","inverse-on-surface":"#eef0ff","on-primary-container":"#fffdff","surface-container-lowest":"#ffffff","on-secondary-fixed":"#001f24","tertiary-fixed":"#6bff8f","tertiary":"#006c2e","on-primary-fixed":"#001b3d","surface-container-highest":"#dae2fd","on-tertiary-container":"#fdfff8","on-primary":"#ffffff","primary":"#005cb3","on-surface-variant":"#414753","tertiary-container":"#00883c","on-tertiary-fixed-variant":"#005321","surface-container-low":"#f2f3ff","surface-bright":"#faf8ff","surface-dim":"#d2d9f4","on-background":"#131b2e","tertiary-fixed-dim":"#4ae176","on-secondary":"#ffffff","surface-container":"#eaedff","error":"#ba1a1a","on-error-container":"#93000a"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"gutter-mobile":"1rem","margin-mobile":"1rem","space-xs":"0.25rem","space-xl":"2.5rem","space-md":"1rem","margin":"2.5rem","space-sm":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem"},fontFamily:{"label-lg":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"title-md":["Inter"],"display-mobile":["Plus Jakarta Sans"],"label-sm":["Inter"],"label-md":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Inter"]},fontSize:{"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"24px","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"body-lg":["17px",{"lineHeight":"26px","fontWeight":"400"}],"headline-sm":["22px",{"lineHeight":"28px","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"display-mobile":["34px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"800"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-5 flex items-center gap-3 bg-surface-container"><img alt="Aqua Puro Zone Brand Logo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XivslyELLnT9x6MJBtbop1Abm-l0-qL7r4BRK3wJ7ARHiFNdjUfdEre_E_zv1z3Sq5ECMxjuOn_iZhAO2FX-Uh4N9cwzlQbaxCC1Xnqcdy14G0XxGAwE6hgu-6tkfTrHnfPT2d2r98OmmJRpxohNQE-5SoIyqiodcQr8txKh7NeeOPPc1JPMuqQVCD00EI42iqEjnV08FDsFO1uTxp7pLVT5iDtnUF4VFwrvSxosyxvkoelDD2vkDjzVQ"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary leading-tight">Aqua Puro Zone</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Admin &amp; Architecture</span></div></div><div class="p-3"><div class="p-2.5 bg-surface-container-high rounded-xl flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Tumakuru Node Active</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">v2.4</span></div></div><nav class="flex-1 px-3 space-y-1.5 overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-xl"><div class="px-3 pt-2 pb-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Operations Core</div><a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 transition-colors bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-xl" data-path="admin-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Admin Overview</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="service-tickets-and-amc" href="#"><span class="material-symbols-outlined text-[20px]">build_circle</span><span>Service &amp; AMC Queue</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="inventory-and-appliances" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Filter &amp; Unit Stock</span></a><div class="px-3 pt-4 pb-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Engineering &amp; Data</div><a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="tech-stack-and-architecture" href="#"><span class="material-symbols-outlined text-[20px]">schema</span><span>SQL &amp; Architecture Hub</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="snap-and-suggest-ai" href="#"><span class="material-symbols-outlined text-[20px]">model_training</span><span>AI Diagnostics Engine</span></a><div class="px-3 pt-4 pb-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Public Portal</div><a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="home" href="#"><span class="material-symbols-outlined text-[20px]">storefront</span><span>Customer Storefront</span></a></nav><div class="p-4 bg-surface-container-high/50"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">person</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate font-semibold">Branch Manager</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Sira Gate Store</span></div></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-6"><div class="w-full h-full flex items-center justify-between"><div class="flex items-center gap-3"><span class="px-3 py-1 bg-surface-container text-primary rounded-full font-label-sm text-label-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">domain</span>Tumakuru HQ</span><span class="hidden sm:inline-block font-body-sm text-body-sm text-on-surface-variant">• 082962 64007 Dispatch</span></div><div class="flex items-center gap-4"><div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-container-low rounded-lg font-label-sm text-label-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-tertiary">verified</span><span>Database Sync: Realtime</span></div><a class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-tertiary text-on-tertiary hover:bg-tertiary-container hover:text-on-tertiary-container rounded-full font-label-md text-label-md transition-colors" href="https://wa.me/918296264007" target="_blank"><span class="material-symbols-outlined text-[16px]">chat</span><span>WhatsApp Desk</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface flex-grow p-6 lg:p-8"><div class="flex flex-col w-full">
+<!-- Top Command & Localization Bar -->
+<div class="w-full bg-surface-container-lowest shadow-sm rounded-2xl p-4 lg:p-6 mb-6">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">water_drop</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Aqua Puro Zone Admin</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Super Admin</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            owner@aquapurozone.com • <span class="text-tertiary font-semibold">Tumakuru Control Hub</span>
+</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<!-- Quick Search -->
+<div class="relative min-w-[240px] flex-1 sm:flex-initial">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface-container-low rounded-xl text-on-surface placeholder:text-outline text-body-sm font-body-sm focus:outline-none focus:bg-surface-container transition-all" id="global-search" placeholder="Search phone, Sira Gate, Kyatsandra..." type="text"/>
+</div>
+<!-- Kannada / English Bilingual Switch -->
+<button class="flex items-center gap-2 px-3.5 py-2 bg-surface-container-high rounded-xl text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md" id="lang-toggle-btn">
+<span class="material-symbols-outlined text-secondary text-[18px]">translate</span>
+<span id="current-lang-text">English / ಕನ್ನಡ</span>
+</button>
+<!-- Notification Bell with Ping -->
+<div class="relative">
+<button class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface"></span>
+</div>
+<!-- Logout Action -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-error bg-error-container/40 hover:bg-error-container hover:text-on-error-container font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="hidden sm:inline">Logout</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dash KPI Grid with Bilingual Labels -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 mb-8">
+<!-- Card 1: Total Inquiries -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between mb-3">
+<div class="w-11 h-11 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">contacts_product</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+        </span>
+</div>
+<div>
+<span class="font-display-mobile text-display-mobile text-on-surface font-extrabold tracking-tight">42</span>
+<div class="flex flex-col mt-0.5">
+<span class="font-title-md text-title-md text-on-surface">Total AI &amp; Store Leads</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">ಒಟ್ಟು ವಿಚಾರಣೆಗಳು</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Today's Action -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between mb-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">phone_in_talk</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm font-bold">
+          Urgent Action
+        </span>
+</div>
+<div>
+<span class="font-display-mobile text-display-mobile text-on-surface font-extrabold tracking-tight">5</span>
+<div class="flex flex-col mt-0.5">
+<span class="font-title-md text-title-md text-on-surface">Pending Customer Calls</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">ಇಂದಿನ ಹೊಸ ಗ್ರಾಹಕರು</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Appliance Stock -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between mb-3">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">inventory</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">82% Stocked</span>
+</div>
+<div>
+<span class="font-display-mobile text-display-mobile text-on-surface font-extrabold tracking-tight">18 <span class="font-headline-sm text-headline-sm text-on-surface-variant">/ 22</span></span>
+<div class="flex flex-col mt-0.5">
+<span class="font-title-md text-title-md text-on-surface">Live In-Stock Appliances</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">ಪ್ರಸ್ತುತ ದಾಸ್ತಾನು ಯಂತ್ರಗಳು</span>
+</div>
+</div>
+</div>
+<!-- Card 4: AMC & Maintenance -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between mb-3">
+<div class="w-11 h-11 rounded-xl bg-tertiary-fixed-dim flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold">Tumakuru Urban</span>
+</div>
+<div>
+<span class="font-display-mobile text-display-mobile text-on-surface font-extrabold tracking-tight">38</span>
+<div class="flex flex-col mt-0.5">
+<span class="font-title-md text-title-md text-on-surface">Active AMC Contracts</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">ಸಕ್ರಿಯ ನಿರ್ವಹಣಾ ಒಪ್ಪಂದಗಳು</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 1: RECENT 'SNAP & SUGGEST' LEADS MANAGEMENT -->
+<div class="bg-surface-container-lowest rounded-3xl p-5 lg:p-7 shadow-sm mb-10">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6">
+<div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[26px]">camera_enhance</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Snap &amp; Suggest Leads Hub</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+          AI-diagnosed water samples and kitchen spaces from local Tumakuru residents • ಫೋಟೋ ಮತ್ತು ನೀರಿನ ಪರಿಶೀಲನೆ
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-2.5">
+<!-- Status Filter -->
+<select class="px-3 py-2 bg-surface-container-low rounded-xl text-on-surface font-label-md text-label-md focus:outline-none" id="lead-status-filter">
+<option value="all">All Statuses (ಎಲ್ಲಾ)</option>
+<option value="new">New Inquiries (ಹೊಸ)</option>
+<option value="contacted">Contacted (ಸಂಪರ್ಕಿಸಲಾಗಿದೆ)</option>
+<option value="converted">Converted (ಖರೀದಿಸಲಾಗಿದೆ)</option>
+<option value="closed">Closed (ಮುಕ್ತಾಯ)</option>
+</select>
+<!-- Source Filter -->
+<select class="px-3 py-2 bg-surface-container-low rounded-xl text-on-surface font-label-md text-label-md focus:outline-none">
+<option>All Sources</option>
+<option>Snap &amp; Suggest AI</option>
+<option>Web Direct Form</option>
+<option>Storefront Walk-in</option>
+</select>
+<!-- CSV Export Button -->
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-secondary text-on-secondary rounded-xl hover:bg-on-secondary-container transition-colors font-label-md text-label-md" onclick="exportLeadsCsv()">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export CSV</span>
+</button>
+</div>
+</div>
+<!-- Leads Table Container -->
+<div class="overflow-x-auto -mx-5 lg:-mx-7 px-5 lg:px-7">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-md text-label-md uppercase tracking-wider">
+<th class="py-3 px-4 rounded-l-xl">Timestamp</th>
+<th class="py-3 px-4">Customer Info &amp; Locality</th>
+<th class="py-3 px-4">Installation Area</th>
+<th class="py-3 px-4">Water Source &amp; TDS</th>
+<th class="py-3 px-4">AI Recommendation</th>
+<th class="py-3 px-4">Status</th>
+<th class="py-3 px-4">Owner Notes</th>
+<th class="py-3 px-4 rounded-r-xl text-right">Quick Contact</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container text-body-sm font-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-4 font-mono text-label-sm text-on-surface-variant">
+              10:24 AM<br/><span class="text-outline">Today</span>
+</td>
+<td class="py-4 px-4">
+<div class="font-title-md text-title-md text-on-surface">Ramesh Gowda</div>
+<div class="text-on-surface-variant font-body-sm">+91 98451 22390</div>
+<span class="inline-block px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[11px] font-medium mt-1">
+                📍 Sira Gate, Tumakuru
+              </span>
+</td>
+<td class="py-4 px-4">
+<div class="relative group cursor-pointer w-14 h-14 rounded-xl overflow-hidden bg-surface-container" onclick="openPhotoModal('Under-Sink Kitchen Space - Sira Gate', 'placeholder')">
+<img class="w-full h-full object-cover" data-alt="High quality smartphone photo of an Indian modular kitchen sink under-counter water inlet valve with dual pipes and tiled wall backdrop, bright domestic natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDABpjCoa534i-YEtL_gIEMJlMKUn03pPeZG5nME226D73ZtOA1guAegaPhxlFWNlF_g3V5MK5ZBL2mamppy0CcH4dg5TS9RZyYgnWGP_AEhEhYWl9OL1HmW-6L1--yzG-WgBKrZXs_UoKJw--jG4YoI0qo6U874tobThBDJzkUZel9TbbjMd8iTgE2icHIaaA-4_6qW0l16rZYgm2mI7s1gNGzv_PlHyXNvhUG1R3gndqgEI_kwU9U"/>
+<div class="absolute inset-0 bg-on-surface/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-surface">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="font-semibold text-on-surface">Borewell (ಬೋರ್‌ವೆಲ್)</span>
+<div class="text-error font-mono font-medium text-label-sm">High TDS ~750 ppm</div>
+<div class="text-on-surface-variant text-label-sm">5 Members</div>
+</td>
+<td class="py-4 px-4">
+<div class="font-semibold text-primary">Aquapure Copper RO+UV</div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-secondary-container/60 text-secondary text-label-sm font-medium">
+                High Dissolved Solids
+              </span>
+</td>
+<td class="py-4 px-4">
+<select class="px-2.5 py-1.5 rounded-xl font-label-md text-label-md bg-error-container/60 text-error font-semibold focus:outline-none cursor-pointer" onchange="updateLeadStatus(this)">
+<option selected="" value="new">New (ಹೊಸ)</option>
+<option value="contacted">Contacted</option>
+<option value="converted">Converted</option>
+<option value="closed">Closed</option>
+</select>
+</td>
+<td class="py-4 px-4">
+<input class="w-44 px-2 py-1 text-label-sm bg-surface-container-low rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container" placeholder="Add note..." type="text" value="Requested demo visit after 4 PM"/>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="tel:08296264007" title="Direct Phone Call">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+<a class="w-9 h-9 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="https://wa.me/918296264007?text=Hello%20Ramesh%20Gowda,%20Aqua%20Puro%20Zone%20Tumakuru%20regarding%20your%20Water%20Purifier%20query" target="_blank" title="Direct WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-4 font-mono text-label-sm text-on-surface-variant">
+              Yesterday<br/><span class="text-outline">05:15 PM</span>
+</td>
+<td class="py-4 px-4">
+<div class="font-title-md text-title-md text-on-surface">Dr. Ananya Rao</div>
+<div class="text-on-surface-variant font-body-sm">+91 97410 88712</div>
+<span class="inline-block px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[11px] font-medium mt-1">
+                📍 Kyatsandra, Tumakuru
+              </span>
+</td>
+<td class="py-4 px-4">
+<div class="relative group cursor-pointer w-14 h-14 rounded-xl overflow-hidden bg-surface-container" onclick="openPhotoModal('Wall Mount Provision - Kyatsandra', 'placeholder')">
+<img class="w-full h-full object-cover" data-alt="Clean kitchen wall near a ceramic sink showing a dedicated 16A electrical socket and pure water supply connection point in a well-lit residential apartment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFoHrtTht-KsZhZaABctjclsTcQT1yPVnpmFjjlVewiNOpPhD75mLqAqNjBA2W-LOTtFhytcKNVod2L129Yc-UzcMyNfgen4NViG7aurpKxfRXF5bjzIp57zY-OFgNPLce4Dkk70ykutGPFFmGbE91pXjWQIdbr4cLrReJP0dW16Ntt6X_jlh69-imwxS1NzXmt2NCCN4hXu2m4ZozC0U6VbdNmAqRRkFpUoQJFdQcZ-Ocgg8kQHMw"/>
+<div class="absolute inset-0 bg-on-surface/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-surface">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="font-semibold text-on-surface">Kaveri Municipal Supply</span>
+<div class="text-secondary font-mono font-medium text-label-sm">TDS ~140 ppm</div>
+<div class="text-on-surface-variant text-label-sm">3 Members</div>
+</td>
+<td class="py-4 px-4">
+<div class="font-semibold text-primary">UltraViolet + Active Carbon</div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-medium">
+                Low TDS Mineral Safe
+              </span>
+</td>
+<td class="py-4 px-4">
+<select class="px-2.5 py-1.5 rounded-xl font-label-md text-label-md bg-secondary-container/80 text-secondary font-semibold focus:outline-none cursor-pointer" onchange="updateLeadStatus(this)">
+<option value="new">New</option>
+<option selected="" value="contacted">Contacted (ಸಂಪರ್ಕಿಸಲಾಗಿದೆ)</option>
+<option value="converted">Converted</option>
+<option value="closed">Closed</option>
+</select>
+</td>
+<td class="py-4 px-4">
+<input class="w-44 px-2 py-1 text-label-sm bg-surface-container-low rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container" placeholder="Add note..." type="text" value="Offered ₹1,500 off combo deal"/>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="tel:08296264007" title="Direct Phone Call">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+<a class="w-9 h-9 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="https://wa.me/918296264007?text=Hello%20Dr.%20Ananya,%20Aqua%20Puro%20Zone%20Tumakuru%20regarding%20UV%20water%20purifier" target="_blank" title="Direct WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-4 font-mono text-label-sm text-on-surface-variant">
+              18 Oct<br/><span class="text-outline">02:10 PM</span>
+</td>
+<td class="py-4 px-4">
+<div class="font-title-md text-title-md text-on-surface">Shivaraj Patel</div>
+<div class="text-on-surface-variant font-body-sm">+91 99014 55321</div>
+<span class="inline-block px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[11px] font-medium mt-1">
+                📍 Batwadi, Tumakuru
+              </span>
+</td>
+<td class="py-4 px-4">
+<div class="relative group cursor-pointer w-14 h-14 rounded-xl overflow-hidden bg-surface-container" onclick="openPhotoModal('Chimney Space Above Hob - Batwadi', 'placeholder')">
+<img class="w-full h-full object-cover" data-alt="Residential kitchen counter above a glass top stove with 60cm cabinet spacing ready for kitchen chimney exhaust duct installation, high angle perspective" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrzov2f0_UB1JP5n-Ld6fcmEBegAYU9oP1FOHYMpDFpAJ2vMnNM8yvobW6rm3sfZtVZNqHqdM9Nx7UXkENmONbrA8OADuViB6UFgohRoH_8A1qjQAG7SnCvT5ZfQtblqKFYP2HUGA9R-yxGU7j0Cm40oE1OeLgiNrLQvDhsc6OV4wOK1Ss452w72pjKOpbDEAwaxUvNoZ-l_dijw8R55LERN1E_LSsrKzz19_FsTKKypUmLA0mWPMT"/>
+<div class="absolute inset-0 bg-on-surface/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-surface">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="font-semibold text-on-surface">Kitchen Chimney &amp; Filter</span>
+<div class="text-on-surface-variant font-mono text-label-sm">Heavy Indian Frying</div>
+<div class="text-on-surface-variant text-label-sm">Ducted Outlet</div>
+</td>
+<td class="py-4 px-4">
+<div class="font-semibold text-primary">Autoclean Baffle 1400m³/h</div>
+<span class="inline-block px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-medium">
+                Motion Sensor Spec
+              </span>
+</td>
+<td class="py-4 px-4">
+<select class="px-2.5 py-1.5 rounded-xl font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed font-semibold focus:outline-none cursor-pointer" onchange="updateLeadStatus(this)">
+<option value="new">New</option>
+<option value="contacted">Contacted</option>
+<option selected="" value="converted">Converted (ಖರೀದಿಸಲಾಗಿದೆ)</option>
+<option value="closed">Closed</option>
+</select>
+</td>
+<td class="py-4 px-4">
+<input class="w-44 px-2 py-1 text-label-sm bg-surface-container-low rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container" placeholder="Add note..." type="text" value="Installed on Sunday by tech Manjunath"/>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<a class="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="tel:08296264007" title="Direct Phone Call">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+<a class="w-9 h-9 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm hover:scale-105 transition-transform" href="https://wa.me/918296264007" target="_blank" title="Direct WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- SECTION 2: PRODUCT INVENTORY & CRUD MANAGEMENT -->
+<div class="bg-surface-container-lowest rounded-3xl p-5 lg:p-7 shadow-sm mb-10">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6">
+<div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[26px]">water_ec</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Purifier &amp; Appliance Inventory</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+          Live Tumakuru warehouse inventory catalog &amp; smart AI matching tags • ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ
+        </p>
+</div>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-xl hover:bg-primary-container shadow-md transition-all font-label-lg text-label-lg self-start md:self-auto" onclick="toggleProductModal(true)">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>Add New Product (ಹೊಸ ಉತ್ಪನ್ನ)</span>
+</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Product Card 1: Featured Water Purifier matching reference image -->
+<div class="bg-surface-container-low rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 text-amber-500 flex items-center justify-center shadow-sm" title="Toggle Featured">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<div class="w-full h-48 rounded-xl bg-surface-container-lowest overflow-hidden flex items-center justify-center p-3 mb-4">
+<img class="h-full w-auto object-contain" data-alt="Modern premium Aquapure countertop RO water purifier unit with curved white casing, brushed copper accents, clear transparent vertical window showcasing internal multi-stage inline filter cartridges, and an integrated digital display showing TDS 35ppm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWUVE7DaOBBSuPezP7wcO14Xex0UztO4006u2e2ZeS6y4JktEhCZtgM10E9-VKyAae8cjxtBERTcKjLdWcOq5K1kNrxzP1lwo06VWwzkLEAsD3DDRuLZC0JN582KlztwFYwmxanszCaT9I5ShBkM6Z5VdJkaJ9KNEi4fAdEUHaVT3K9R0nP7rN9EUddAP0oqDkRdteJdCZT3O8F_0igxecxXmksJTrI0UJ4MD6bd2yjevqxVwDD8cg"/>
+</div>
+<div>
+<div class="flex items-center justify-between gap-2 mb-1">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+              RO + UV + Alkaline
+            </span>
+<span class="font-title-md text-title-md text-primary font-bold">₹16,499</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">AquaPure Copper Max Pro</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mb-3">
+            Digital TDS Display • 15 LPH Flow Rate • 8L Copper Storage
+          </p>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#borewell</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#high_tds</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#countertop</span>
+</div>
+</div>
+<div class="pt-3 bg-surface-container-low flex items-center justify-between gap-3">
+<!-- Stock Toggle Switch -->
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="sr-only peer" onchange="toggleStockLabel(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-tertiary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface after:rounded-full after:h-5 after:w-5 after:transition-all relative"></div>
+<span class="font-label-md text-label-md text-tertiary font-bold stock-status-text">In Stock</span>
+</label>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" onclick="editProductDemo('AquaPure Copper Max Pro', '16499')" title="Edit Product">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 rounded-lg text-error hover:bg-error-container/40 transition-colors" title="Delete Product">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2: Automatic Whole House Softener -->
+<div class="bg-surface-container-low rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 text-on-surface-variant flex items-center justify-center shadow-sm" title="Toggle Featured">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+</div>
+<div class="w-full h-48 rounded-xl bg-surface-container-lowest overflow-hidden flex items-center justify-center p-3 mb-4">
+<img class="h-full w-auto object-contain" data-alt="Sleek cylinder FRP automated domestic water softener vessel with digital automatic multiport regeneration valve head on high quality white pedestal in clean domestic utility area" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2sS6I8zggyBQpXlJu85_c3ACTlS2eQ00WmQJAfJk0nYV3c6MN-rOqpttc53WcXE0rcrguZ65tF55IdK18yeDlK1y6MPK_PC7ulrwzyDwuJHWR9dIGtYGwaK2o3JjMi2cYmKfefGPzSNPxftC1mSQ3ScJiTSpZiRKF4L5tsFCUIIioB5pMH82jqDGmVvmQ14HkJqNr1XXhj8ZTQgJKPTpzpjwnA0MKelCNYVjcoyhZz-ZhWQ7OlYYu"/>
+</div>
+<div>
+<div class="flex items-center justify-between gap-2 mb-1">
+<span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold">
+              Whole House Softener
+            </span>
+<span class="font-title-md text-title-md text-primary font-bold">₹28,500</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Auto-Soft 2000L Resin Plant</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mb-3">
+            Automatic Regeneration • Protects Tumakuru Bathroom Tiles &amp; Geysers
+          </p>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#hard_water</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#whole_bungalow</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#floor_standing</span>
+</div>
+</div>
+<div class="pt-3 bg-surface-container-low flex items-center justify-between gap-3">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="sr-only peer" onchange="toggleStockLabel(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-tertiary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface after:rounded-full after:h-5 after:w-5 after:transition-all relative"></div>
+<span class="font-label-md text-label-md text-tertiary font-bold stock-status-text">In Stock</span>
+</label>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" onclick="editProductDemo('Auto-Soft 2000L Resin Plant', '28500')" title="Edit Product">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 rounded-lg text-error hover:bg-error-container/40 transition-colors" title="Delete Product">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3: Auto-Clean Kitchen Chimney -->
+<div class="bg-surface-container-low rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 text-amber-500 flex items-center justify-center shadow-sm" title="Toggle Featured">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<div class="w-full h-48 rounded-xl bg-surface-container-lowest overflow-hidden flex items-center justify-center p-3 mb-4">
+<img class="h-full w-auto object-contain" data-alt="Modern curved black tempered glass 60cm kitchen chimney hood with touch control panel, stainless steel baffle filter, and subtle LED illumination strip on white wall background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGfWLSoYHu53dHkGs1mb1qT1ahg_XudjJ84mmP9MjcG8F9yo3IzUYoFV9RN8tSrcOn9fq1EWp8bwQdidJfTxo2Mnp3dTDPjD9UgWer5D6F2-yutTAfK53sI6CmVBD9AA7Gf22w7EAThqr3XxhE_LzwBITfIGSI59j7ie8Gkn_aQN7dD9UY2gJvqZR80kWfEVb9Y3yHLLmjsMdZjjj9-FgW9-oC0jaeTkdrzEHK2D5rSm3q9a1WqHVn"/>
+</div>
+<div>
+<div class="flex items-center justify-between gap-2 mb-1">
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold">
+              Kitchen Exhaust Chimney
+            </span>
+<span class="font-title-md text-title-md text-primary font-bold">₹14,200</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Vortex 1400 Suction Hood</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mb-3">
+            Thermal Auto-Clean • Motion Wave Sensor • Oil Collector Tray
+          </p>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#heavy_smoke</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#wall_mount</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[11px]">#autoclean</span>
+</div>
+</div>
+<div class="pt-3 bg-surface-container-low flex items-center justify-between gap-3">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="sr-only peer" onchange="toggleStockLabel(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-tertiary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface after:rounded-full after:h-5 after:w-5 after:transition-all relative"></div>
+<span class="font-label-md text-label-md text-tertiary font-bold stock-status-text">In Stock</span>
+</label>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" onclick="editProductDemo('Vortex 1400 Suction Hood', '14200')" title="Edit Product">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 rounded-lg text-error hover:bg-error-container/40 transition-colors" title="Delete Product">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: REVIEWS & CUSTOMER ENDORSEMENTS -->
+<div class="bg-surface-container-lowest rounded-3xl p-5 lg:p-7 shadow-sm mb-10">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6">
+<div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-amber-500 text-[26px]">star</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Verified Customer Reviews</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+          Manage local Google ratings &amp; customer endorsements on the storefront • ಗ್ರಾಹಕರ ವಿಮರ್ಶೆಗಳು
+        </p>
+</div>
+<button class="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-xl hover:bg-on-secondary-container transition-colors font-label-md text-label-md self-start sm:self-auto" onclick="toggleReviewModal(true)">
+<span class="material-symbols-outlined text-[18px]">rate_review</span>
+<span>+ Add Verified Review (ವಿಮರ್ಶೆ ಸೇರಿಸಿ)</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Review 1 -->
+<div class="bg-surface-container-low rounded-2xl p-4 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Chidananda Swamy</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">Google 5★</span>
+</div>
+<label class="flex items-center gap-2 cursor-pointer">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Visible on Web</span>
+<input checked="" class="accent-primary w-4 h-4 rounded" type="checkbox"/>
+</label>
+</div>
+<p class="font-body-md text-body-md text-on-surface italic mb-2">
+            "Prompt service at Sira Gate store! The owner himself came for TDS checking and installed the Copper RO within 4 hours. Drinking water taste is now pure and sweet."
+          </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-medium">
+            ತುಮಕೂರಿನಲ್ಲಿ ಅತ್ಯುತ್ತಮ ವಾಟರ್ ಪ್ಯೂರಿಫೈಯರ್ ಸೇವೆ! ಶಿರಾ ಗೇಟ್ ಶಾಖೆ.
+          </p>
+</div>
+<div class="text-label-sm text-outline mt-3 flex items-center justify-between">
+<span>Installed: AquaPure Copper Max Pro • Sira Gate</span>
+<button class="text-error font-label-sm hover:underline">Remove</button>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="bg-surface-container-low rounded-2xl p-4 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Manjula B. (Batawadi)</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">Verified AMC 5★</span>
+</div>
+<label class="flex items-center gap-2 cursor-pointer">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Visible on Web</span>
+<input checked="" class="accent-primary w-4 h-4 rounded" type="checkbox"/>
+</label>
+</div>
+<p class="font-body-md text-body-md text-on-surface italic mb-2">
+            "Got kitchen chimney and sediment filter done together. Fast installation and very polite technician. Low vibration chimney."
+          </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-medium">
+            ಅತ್ಯುತ್ತಮ ಚಿಮಣಿ ಮತ್ತು ವಾಟರ್ ಫಿಲ್ಟರ್ ಸೇವೆ.
+          </p>
+</div>
+<div class="text-label-sm text-outline mt-3 flex items-center justify-between">
+<span>Installed: Vortex 1400 Suction Hood • Batwadi</span>
+<button class="text-error font-label-sm hover:underline">Remove</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 4: SITE SETTINGS & ANNOUNCEMENT BAR CONTROLLER -->
+<div class="bg-surface-container-lowest rounded-3xl p-5 lg:p-7 shadow-sm mb-12">
+<div class="pb-6">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[26px]">tune</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Store Contact &amp; Announcement Bar Settings</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+        Update customer helpline, Tumakuru address, and promotional banner without code modification
+      </p>
+</div>
+<form class="space-y-6" id="settings-form" onsubmit="saveSettingsAlert(event)">
+<!-- Announcement Banner Bar Switch & Text -->
+<div class="p-4 bg-surface-container-low rounded-2xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">campaign</span>
+<span class="font-title-md text-title-md text-on-surface">Top Announcement Bar (ಉಚಿತ ಪರೀಕ್ಷೆ ಬ್ಯಾನರ್)</span>
+</div>
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-tertiary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface after:rounded-full after:h-5 after:w-5 after:transition-all relative"></div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Active Banner</span>
+</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Banner Text (English)</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-lowest rounded-xl text-on-surface text-body-sm font-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/20" type="text" value="💧 Free Water TDS Testing &amp; Same-Day Purifier Installation in Tumakuru! Call 082962 64007"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Banner Text (ಕನ್ನಡ - Kannada)</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-lowest rounded-xl text-on-surface text-body-sm font-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/20" type="text" value="💧 ತುಮಕೂರಿನಲ್ಲಿ ಉಚಿತ ನೀರಿನ TDS ಪರೀಕ್ಷೆ ಮತ್ತು ಅದೇ ದಿನ ಫಿಲ್ಟರ್ ಅಳವಡಿಕೆ! ಕರೆ ಮಾಡಿ: 082962 64007"/>
+</div>
+</div>
+</div>
+<!-- Core Contact Details -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Official Helpline Phone</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">call</span>
+<input class="w-full pl-10 pr-3 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md text-body-md focus:outline-none" type="text" value="082962 64007"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">WhatsApp Direct Desk</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-tertiary text-[20px]">chat</span>
+<input class="w-full pl-10 pr-3 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md text-body-md focus:outline-none" type="text" value="+91 82962 64007"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Operating Working Hours</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">schedule</span>
+<input class="w-full pl-10 pr-3 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md text-body-md focus:outline-none" type="text" value="Mon - Sun: 9:00 AM - 9:00 PM"/>
+</div>
+</div>
+<div class="md:col-span-2">
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Storefront Physical Address (ಶಿರಾ ಗೇಟ್ ವಿಳಾಸ)</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-[20px]">location_on</span>
+<input class="w-full pl-10 pr-3 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md text-body-md focus:outline-none" type="text" value="Old Shanimatma Temple, Satyamangala Rd, Sira Gate, Tumakuru, Karnataka 572106"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Storefront Tagline</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md text-body-md focus:outline-none" type="text" value="Pure Water, Pure Life in Tumakuru"/>
+</div>
+</div>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-5 py-2.5 bg-surface-container-high rounded-xl text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors" type="reset">
+          Reset Changes
+        </button>
+<button class="px-6 py-2.5 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg hover:bg-primary-container shadow-md transition-all flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[20px]">save</span>
+<span>Save Store Settings</span>
+</button>
+</div>
+</form>
+</div>
+<!-- STICKY OWNER QUICK-ACTION BAR (Optimized for Mobile/Tablet in-shop operations) -->
+<div class="fixed bottom-4 left-4 right-4 lg:left-72 lg:right-8 z-30 bg-surface-container-lowest/95 backdrop-blur-xl shadow-xl rounded-2xl p-3 flex items-center justify-between border-t border-surface-container">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-tertiary animate-pulse"></div>
+<span class="font-label-md text-label-md text-on-surface hidden sm:inline">
+        Live Shop Desk: <span class="font-bold text-primary">Tumakuru Sira Gate</span>
+</span>
+</div>
+<div class="flex items-center gap-2">
+<a class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-on-primary rounded-xl font-label-md text-label-md shadow-sm hover:bg-primary-container transition-colors" href="tel:08296264007">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span>Call Shop</span>
+</a>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 bg-secondary text-on-secondary rounded-xl font-label-md text-label-md shadow-sm hover:bg-on-secondary-container transition-colors" onclick="toggleProductModal(true)">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="hidden sm:inline">New Product</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md hover:bg-surface-variant transition-colors" onclick="exportLeadsCsv()">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span class="hidden md:inline">Download CSV</span>
+</button>
+</div>
+</div>
+<!-- MODAL: ADD / EDIT PRODUCT -->
+<div class="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm hidden items-center justify-center p-4" id="product-modal">
+<div class="bg-surface-container-lowest rounded-3xl max-w-2xl w-full p-6 lg:p-8 shadow-2xl max-h-[921px] overflow-y-auto">
+<div class="flex items-center justify-between pb-4 border-b border-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">inventory_2</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface" id="product-modal-title">Add New Product (ಹೊಸ ಉತ್ಪನ್ನ)</h3>
+</div>
+<button class="p-1 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" onclick="toggleProductModal(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="space-y-4 pt-4" id="product-form" onsubmit="handleProductSubmit(event)">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Product Name *</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-name" placeholder="e.g. AquaPure Copper RO+UV 15L" required="" type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Category *</label>
+<select class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-category">
+<option>RO Purifier</option>
+<option>UV Purifier</option>
+<option>UF Gravity Purifier</option>
+<option>Water Softener</option>
+<option>Sand / Iron Removal Filter</option>
+<option>Kitchen Exhaust Chimney</option>
+<option>Spare Cartridges / Membrane</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Brand Name *</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-brand" type="text" value="Aqua Puro Zone"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Price (₹) *</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-price" placeholder="14500" required="" type="number"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Purification / Capacity</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-capacity" placeholder="15 LPH / 8 Litres" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Mounting Type</label>
+<select class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-body-md focus:outline-none" id="prod-mount">
+<option>Countertop &amp; Wall-mount</option>
+<option>Wall-mount only</option>
+<option>Under-sink / Under-counter</option>
+<option>Floor-standing Industrial</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">AI Recommendation Tags (Comma separated)</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl text-on-surface font-mono text-label-md focus:outline-none" id="prod-tags" placeholder="borewell, high_tds, compact_sink, hard_water" type="text"/>
+<span class="text-label-sm text-outline mt-1 block">These tags allow the 'Snap &amp; Suggest' AI engine to pair this model with Tumakuru customer photos.</span>
+</div>
+<!-- Product Image Preview / Upload Box -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Product Photograph (White Background)</label>
+<div class="p-4 bg-surface-container-low rounded-xl flex items-center gap-4">
+<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-outline text-[32px]">add_photo_alternate</span>
+</div>
+<div>
+<button class="px-3 py-1.5 bg-surface-container-high rounded-lg text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors" type="button">
+                Upload PNG / JPEG
+              </button>
+<p class="text-label-sm text-outline mt-1">Recommended: 800x800px transparent or clean studio background</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-3 pt-4 border-t border-surface-container">
+<button class="px-4 py-2 bg-surface-container-high rounded-xl text-on-surface font-label-md text-label-md hover:bg-surface-variant" onclick="toggleProductModal(false)" type="button">
+            Cancel
+          </button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-xl font-label-md text-label-md hover:bg-primary-container shadow-sm" type="submit">
+            Save Product (ಉಳಿಸಿ)
+          </button>
+</div>
+</form>
+</div>
+</div>
+<!-- MODAL: IMAGE PREVIEW MODAL FOR LEADS SPACE PHOTO -->
+<div class="fixed inset-0 z-50 bg-on-surface/60 backdrop-blur-md hidden items-center justify-center p-4" id="photo-preview-modal">
+<div class="bg-surface-container-lowest rounded-3xl max-w-lg w-full p-5 shadow-2xl">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container mb-3">
+<h4 class="font-title-md text-title-md text-on-surface" id="photo-modal-caption">Installation Space Photograph</h4>
+<button class="p-1 rounded-full text-on-surface-variant hover:bg-surface-container" onclick="closePhotoModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="w-full h-80 rounded-2xl bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High resolution detailed kitchen space photograph showing inlet pipes and space availability for water purifier installation" id="photo-modal-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLnqqtNQbBt2kN-TkvZvcJvdNxAOtWcHRKe_7sT0KzXxq8hh68DyLXB9slUfmXy2Xzh93O9W1cGh3_tH799n-kk-2TVqWCmOyjVSekvexGoamY4oMUyJo-EbBhlCQn4QWZpsDpv5Huvpv56C5iesO6Jb_mxasItlO1WchfcD-wTE9BGNdC5yiR0AS2J1VSrxHGaQYHHf0Xs86uzYH0Xm36B6Kk8V9X8m9yXKnfxPppuuAZMaMI6onJ"/>
+</div>
+<div class="pt-3 flex justify-between items-center text-body-sm text-on-surface-variant">
+<span>Verified Tumakuru Customer Upload</span>
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-xl font-label-md text-label-md" onclick="closePhotoModal()">Close Preview</button>
+</div>
+</div>
+</div>
+<!-- MODAL: ADD VERIFIED REVIEW -->
+<div class="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm hidden items-center justify-center p-4" id="review-modal">
+<div class="bg-surface-container-lowest rounded-3xl max-w-md w-full p-6 shadow-2xl">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container mb-4">
+<h4 class="font-title-lg text-title-lg text-on-surface">Add Customer Review</h4>
+<button class="p-1 rounded-full text-on-surface-variant hover:bg-surface-container" onclick="toggleReviewModal(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="space-y-3" onsubmit="handleReviewSubmit(event)">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Customer Name &amp; Area</label>
+<input class="w-full px-3 py-2 bg-surface-container-low rounded-xl text-on-surface font-body-sm focus:outline-none" placeholder="e.g. Suresh Kumar (Kyatsandra)" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Review Rating</label>
+<select class="w-full px-3 py-2 bg-surface-container-low rounded-xl text-on-surface font-body-sm focus:outline-none">
+<option>5 Stars ★★★★★</option>
+<option>4 Stars ★★★★☆</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Review Feedback (English or Kannada)</label>
+<textarea class="w-full px-3 py-2 bg-surface-container-low rounded-xl text-on-surface font-body-sm focus:outline-none" placeholder="Write review comments..." required="" rows="3"></textarea>
+</div>
+<div class="pt-2 flex justify-end gap-2">
+<button class="px-4 py-2 bg-surface-container-high rounded-xl text-on-surface font-label-md text-label-md" onclick="toggleReviewModal(false)" type="button">Cancel</button>
+<button class="px-5 py-2 bg-secondary text-on-secondary rounded-xl font-label-md text-label-md" type="submit">Publish Review</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+  // Bilingual Toggle Functionality
+  let isKannada = false;
+  const langToggleBtn = document.getElementById('lang-toggle-btn');
+  const langText = document.getElementById('current-lang-text');
+
+  langToggleBtn.addEventListener('click', () => {
+    isKannada = !isKannada;
+    if (isKannada) {
+      langText.textContent = "ಕನ್ನಡ (ಸಕ್ರಿಯ) / English";
+      langToggleBtn.classList.add('bg-primary', 'text-on-primary');
+    } else {
+      langText.textContent = "English / ಕನ್ನಡ";
+      langToggleBtn.classList.remove('bg-primary', 'text-on-primary');
+    }
+  });
+
+  // Photo Preview Modal
+  function openPhotoModal(caption, imgSrc) {
+    document.getElementById('photo-modal-caption').innerText = caption;
+    const modal = document.getElementById('photo-preview-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closePhotoModal() {
+    const modal = document.getElementById('photo-preview-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  // Product Add / Edit Modal
+  function toggleProductModal(show) {
+    const modal = document.getElementById('product-modal');
+    if (show) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    } else {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function editProductDemo(name, price) {
+    document.getElementById('product-modal-title').innerText = "Edit Product: " + name;
+    document.getElementById('prod-name').value = name;
+    document.getElementById('prod-price').value = price;
+    toggleProductModal(true);
+  }
+
+  function handleProductSubmit(e) {
+    e.preventDefault();
+    alert('ಉತ್ಪನ್ನವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ! (Product saved successfully in Tumakuru Catalog)');
+    toggleProductModal(false);
+  }
+
+  // Review Modal
+  function toggleReviewModal(show) {
+    const modal = document.getElementById('review-modal');
+    if (show) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    } else {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function handleReviewSubmit(e) {
+    e.preventDefault();
+    alert('ಹೊಸ ವಿಮರ್ಶೆಯನ್ನು ಸೇರಿಸಲಾಗಿದೆ! (Verified review published to web store)');
+    toggleReviewModal(false);
+  }
+
+  // Stock status toggle text
+  function toggleStockLabel(checkbox) {
+    const textSpan = checkbox.parentElement.querySelector('.stock-status-text');
+    if (checkbox.checked) {
+      textSpan.textContent = 'In Stock';
+      textSpan.classList.remove('text-outline');
+      textSpan.classList.add('text-tertiary');
+    } else {
+      textSpan.textContent = 'Out of Stock';
+      textSpan.classList.remove('text-tertiary');
+      textSpan.classList.add('text-outline');
+    }
+  }
+
+  // Lead status dynamic badge styling
+  function updateLeadStatus(selectElem) {
+    const val = selectElem.value;
+    selectElem.className = "px-2.5 py-1.5 rounded-xl font-label-md text-label-md font-semibold focus:outline-none cursor-pointer ";
+    if (val === 'new') {
+      selectElem.className += "bg-error-container/60 text-error";
+    } else if (val === 'contacted') {
+      selectElem.className += "bg-secondary-container/80 text-secondary";
+    } else if (val === 'converted') {
+      selectElem.className += "bg-tertiary-fixed text-on-tertiary-fixed";
+    } else {
+      selectElem.className += "bg-surface-container text-on-surface-variant";
+    }
+  }
+
+  // CSV Export utility
+  function exportLeadsCsv() {
+    const rows = [
+      ["Date", "Customer Name", "Phone", "Locality", "Water Source", "TDS ppm", "Status"],
+      ["Today 10:24 AM", "Ramesh Gowda", "9845122390", "Sira Gate", "Borewell", "750", "New"],
+      ["Yesterday", "Dr. Ananya Rao", "9741088712", "Kyatsandra", "Kaveri Municipal", "140", "Contacted"],
+      ["18 Oct", "Shivaraj Patel", "9901455321", "Batwadi", "Chimney Intake", "N/A", "Converted"]
+    ];
+    let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "AquaPuroZone_Tumakuru_Leads.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function saveSettingsAlert(e) {
+    e.preventDefault();
+    alert('ಅಂಗಡಿಯ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ! (Aqua Puro Zone Store settings updated!)');
+  }
+
+  // Search filter micro-interaction
+  document.getElementById('global-search').addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(r => {
+      const txt = r.textContent.toLowerCase();
+      r.style.display = txt.includes(term) ? '' : 'none';
+    });
+  });
+</script></main></div></body></html>
