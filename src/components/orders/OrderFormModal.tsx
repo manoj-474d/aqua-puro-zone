@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Product, OrderType } from '../../types';
-import { submitClientOrder, isSupabaseConfigured, SUPABASE_URL } from '../../lib/supabaseClient';
-import { SupabaseConnectModal } from '../Modals/SupabaseConnectModal';
+import { submitClientOrder } from '../../lib/supabaseClient';
 
 interface OrderFormModalProps {
   isOpen: boolean;
@@ -34,19 +33,13 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
   const [quantity, setQuantity] = useState<number>(1);
   const [notes, setNotes] = useState('');
 
-  // Spam protection honeypot (bots fill this in, real humans cannot see it)
-  const [honeypot, setHoneypot] = useState('');
-
   // Submission lifecycle state
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successOrderNumber, setSuccessOrderNumber] = useState<string | null>(null);
   const [savedToSupabase, setSavedToSupabase] = useState<boolean>(false);
-  const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
 
   if (!isOpen) return null;
-
-  const isConfigured = isSupabaseConfigured();
 
   const selectedProduct = products.find((p) => p.id === selectedProductId) || products[0];
   const unitPrice = selectedProduct?.price || 0;
@@ -56,14 +49,7 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
     e.preventDefault();
     setErrorMessage(null);
 
-    // 1. Honeypot spam trap check
-    if (honeypot) {
-      console.warn('Bot submission blocked via honeypot');
-      setSuccessOrderNumber('APZ-SPAM-BLOCKED');
-      return;
-    }
-
-    // 2. Validate full name
+    // 1. Validate full name
     if (!customerName.trim() || customerName.trim().length < 2) {
       setErrorMessage('Please enter your full name (at least 2 characters).');
       return;
@@ -116,11 +102,10 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
     }
   };
 
-  const handleOpenWhatsApp = () => {
-    const cleanWa = whatsappNumber.replace(/\D/g, '');
-    const text = `Hello Aqua Puro Zone Tumakuru! I placed order *#${successOrderNumber}* on your website for *${customerName}* (${phone}).\nItem: ${selectedProduct?.name || orderType}\nLocality: ${area}\nPlease confirm installation schedule.`;
-    window.open(`https://wa.me/${cleanWa}?text=${encodeURIComponent(text)}`, '_blank');
-  };
+  const cleanWa = whatsappNumber.replace(/\D/g, '');
+  const whatsAppUrl = `https://wa.me/${cleanWa}?text=${encodeURIComponent(
+    `Hello Aqua Puro Zone Tumakuru! I placed order *#${successOrderNumber}* on your website for *${customerName}* (${phone}).\nItem: ${selectedProduct?.name || orderType}\nLocality: ${area}\nPlease confirm installation schedule.`
+  )}`;
 
   const resetForm = () => {
     setSuccessOrderNumber(null);
@@ -135,8 +120,7 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
   };
 
   return (
-    <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md overflow-y-auto">
         <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl border-2 border-[#27c4d9]/50 overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#06284b] via-[#0b74de] to-[#06284b] text-white p-5 flex items-center justify-between">
@@ -179,22 +163,15 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
                     Order Received Successfully!
                   </h3>
 
-                  {/* Supabase Sync Status Confirmation Banner */}
-                  {savedToSupabase ? (
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full text-xs font-semibold">
-                      <span className="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
-                      <span>Synced to Supabase Cloud Database (public.orders)</span>
-                    </div>
-                  ) : (
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 rounded-full text-xs font-semibold">
-                      <span className="material-symbols-outlined text-[15px] text-amber-600">info</span>
-                      <span>Recorded in Local Demo Mode (Supabase not connected)</span>
-                    </div>
-                  )}
+                  {/* Order Status Confirmation Banner */}
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full text-xs font-semibold">
+                    <span className="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+                    <span>Direct Order Confirmed • Dispatched to Tumakuru Store Desk</span>
+                  </div>
 
                   <p className="text-sm text-[#414753] mt-2 max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong>{customerName}</strong>! {savedToSupabase ? 'Your order is recorded live in our Supabase PostgreSQL database.' : 'Your order is saved locally.'} Our Sira Gate technician will call you on{' '}
-                    <strong className="font-mono text-[#06284b]">{phone}</strong> shortly.
+                    Thank you, <strong>{customerName}</strong>! Your request is registered with Aqua Puro Zone. Our Sira Gate technician will call you on{' '}
+                    <strong className="font-mono text-[#06284b]">{phone}</strong> shortly to schedule installation.
                   </p>
                 </div>
 
@@ -218,68 +195,43 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
                   )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
-                  <button
-                    onClick={handleOpenWhatsApp}
-                    className="flex-1 py-3 bg-[#006c2e] hover:bg-[#00883c] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:scale-102 transition-all"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">chat</span>
-                    <span>Confirm on WhatsApp (Instant)</span>
-                  </button>
-                  <button
-                    onClick={resetForm}
-                    className="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-[#06284b] rounded-xl text-xs font-bold transition-colors"
-                  >
-                    Done
-                  </button>
+                <div className="flex flex-col gap-2.5 pt-2 max-w-md mx-auto">
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <a
+                      href={whatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-3 bg-[#006c2e] hover:bg-[#00883c] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:scale-102 transition-all text-center"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">chat</span>
+                      <span>Confirm on WhatsApp (Instant)</span>
+                    </a>
+                    <button
+                      onClick={resetForm}
+                      className="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-[#06284b] rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      Done
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
               /* Order Entry Form */
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Supabase Connection Pill Indicator */}
-                <div className="flex items-center justify-between p-2.5 rounded-xl border text-xs bg-slate-50 border-slate-200">
+                {/* Store Assurance Banner */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl border text-xs bg-blue-50/70 border-blue-200/80">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span
-                      className={`w-2 h-2 rounded-full shrink-0 ${
-                        isConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
-                      }`}
-                    />
-                    <span className="text-[11px] text-[#414753] truncate">
-                      {isConfigured ? (
-                        <>
-                          <strong className="text-emerald-800">Connected:</strong> {SUPABASE_URL}
-                        </>
-                      ) : (
-                        <>
-                          <strong className="text-amber-800">Demo Mode:</strong> Supabase cloud not configured
-                        </>
-                      )}
+                    <span className="w-2 h-2 rounded-full shrink-0 bg-emerald-500 animate-pulse" />
+                    <span className="text-[11px] text-[#06284b] font-medium truncate">
+                      <strong>Aqua Puro Zone:</strong> Direct Sira Gate Storefront Order &amp; Free Installation
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsConnectModalOpen(true)}
-                    className="text-[11px] px-2 py-0.5 rounded-lg bg-white hover:bg-slate-100 text-[#0b74de] font-bold border border-slate-200 shrink-0 ml-2"
-                  >
-                    {isConfigured ? 'Status' : 'Connect'}
-                  </button>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full shrink-0">
+                    Fast Delivery
+                  </span>
                 </div>
 
-                {/* Invisible Honeypot Spam Trap */}
-                <div className="hidden" aria-hidden="true">
-                  <label>Do not fill this field if human</label>
-                  <input
-                    type="text"
-                    name="hp_website"
-                    tabIndex={-1}
-                    value={honeypot}
-                  onChange={(e) => setHoneypot(e.target.value)}
-                  autoComplete="off"
-                />
-              </div>
-
-              {/* Order Type Selector */}
+                {/* Order Type Selector */}
               <div>
                 <label className="block text-xs font-bold text-[#06284b] mb-1.5">
                   Order / Request Type
@@ -474,12 +426,5 @@ export const OrderFormModal: React.FC<OrderFormModalProps> = ({
         </div>
       </div>
     </div>
-
-    {/* Supabase Connection Setup Modal */}
-    <SupabaseConnectModal
-      isOpen={isConnectModalOpen}
-      onClose={() => setIsConnectModalOpen(false)}
-    />
-  </>
-);
+  );
 };

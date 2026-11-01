@@ -14,20 +14,52 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS public.products (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
+  slug TEXT UNIQUE,
   category TEXT NOT NULL DEFAULT 'Water Purifier',
   brand TEXT NOT NULL DEFAULT 'Aqua Puro Zone',
   price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+  original_price NUMERIC(10, 2),
   capacity TEXT,
   mount_type TEXT,
   in_stock BOOLEAN NOT NULL DEFAULT true,
+  visible_on_storefront BOOLEAN NOT NULL DEFAULT true,
+  stock_quantity INTEGER NOT NULL DEFAULT 5 CHECK (stock_quantity >= 0),
+  featured BOOLEAN NOT NULL DEFAULT false,
   image_url TEXT,
+  gallery_images JSONB DEFAULT '[]'::jsonb,
   description TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  features JSONB DEFAULT '[]'::jsonb,
+  target_water_type TEXT DEFAULT 'Borewell',
+  purification_stages TEXT,
+  warranty TEXT,
+  max_tds TEXT,
+  flow_rate TEXT,
+  storage_capacity TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Index on stock and category
+-- Safe migrations in case table already exists
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS slug TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS original_price NUMERIC(10, 2);
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS visible_on_storefront BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock_quantity INTEGER NOT NULL DEFAULT 5;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS featured BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS gallery_images JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS features JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS target_water_type TEXT DEFAULT 'Borewell';
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS purification_stages TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS warranty TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS max_tds TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS flow_rate TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS storage_capacity TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+-- Indexes on products
 CREATE INDEX IF NOT EXISTS idx_products_in_stock ON public.products (in_stock);
+CREATE INDEX IF NOT EXISTS idx_products_visible ON public.products (visible_on_storefront);
 CREATE INDEX IF NOT EXISTS idx_products_category ON public.products (category);
+CREATE INDEX IF NOT EXISTS idx_products_slug ON public.products (slug);
 
 -- ==============================================================================
 -- 3. ORDERS SEQUENCE & TABLE
@@ -119,6 +151,12 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS trg_orders_updated_at ON public.orders;
 CREATE TRIGGER trg_orders_updated_at
 BEFORE UPDATE ON public.orders
+FOR EACH ROW
+EXECUTE FUNCTION public.fn_update_timestamp();
+
+DROP TRIGGER IF EXISTS trg_products_updated_at ON public.products;
+CREATE TRIGGER trg_products_updated_at
+BEFORE UPDATE ON public.products
 FOR EACH ROW
 EXECUTE FUNCTION public.fn_update_timestamp();
 

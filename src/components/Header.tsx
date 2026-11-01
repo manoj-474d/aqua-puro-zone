@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { isSupabaseConfigured } from '../lib/supabaseClient';
 import { SupabaseConnectModal } from './Modals/SupabaseConnectModal';
+import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
   onToggleSidebarMobile?: () => void;
@@ -9,6 +10,8 @@ interface HeaderProps {
   isKannada: boolean;
   unreadCount?: number;
   onOpenNotifications?: () => void;
+  onNavigateToStorefront?: () => void;
+  onNavigateToAiLibrary?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,7 +21,10 @@ export const Header: React.FC<HeaderProps> = ({
   isKannada,
   unreadCount = 2,
   onOpenNotifications,
+  onNavigateToStorefront,
+  onNavigateToAiLibrary,
 }) => {
+  const { user, logout } = useAuth();
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const cleanWaNumber = whatsappNumber.replace(/[^0-9]/g, '');
 
@@ -69,6 +75,19 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
+          {/* Quick Batch Upload Button */}
+          {onNavigateToAiLibrary && (
+            <button
+              onClick={onNavigateToAiLibrary}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#005cb3] hover:bg-[#0b74de] text-white rounded-full text-[12px] font-bold transition-all shadow-xs"
+              title="Batch Uploading: Drag-and-drop or file selection supporting multiple images simultaneously on desktop and mobile"
+            >
+              <span className="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+              <span className="hidden sm:inline">{isKannada ? 'ಬ್ಯಾಚ್ ಅಪ್‌ಲೋಡ್' : 'Batch Upload'}</span>
+              <span className="sm:hidden text-[11px]">Batch</span>
+            </button>
+          )}
+
           <a
             href={`https://wa.me/${cleanWaNumber}?text=${encodeURIComponent('Hello Aqua Puro Zone Tumakuru Operations Desk')}`}
             target="_blank"
@@ -94,6 +113,29 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="w-9 h-9 rounded-full bg-[#005cb3] flex items-center justify-center text-white shadow-xs">
             <span className="material-symbols-outlined text-[18px]">person</span>
           </div>
+
+          <button
+            onClick={() => onNavigateToStorefront?.()}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white hover:bg-slate-100 text-[#06284b] border border-slate-200 transition-colors"
+            title="Go to Customer Storefront (Public Website)"
+          >
+            <span className="material-symbols-outlined text-[15px] text-[#006c2e]">storefront</span>
+            <span>Storefront</span>
+          </button>
+
+          {user && (
+            <button
+              onClick={async () => {
+                await logout();
+                onNavigateToStorefront?.();
+              }}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
+              title="Sign Out of Admin"
+            >
+              <span className="material-symbols-outlined text-[15px]">logout</span>
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

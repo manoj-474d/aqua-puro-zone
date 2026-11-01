@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Lead, Product, Review, StoreSettings, LeadStatus } from '../types';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '../data/initialData';
+import { ProductManagementDashboard } from '../components/admin/ProductManagementDashboard';
 
 interface AdminOverviewProps {
   leads: Lead[];
@@ -13,6 +15,10 @@ interface AdminOverviewProps {
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (productId: string) => void;
   onOpenAddProduct: () => void;
+  onUpdateProductPhoto?: (productId: string, newImageUrl: string) => void;
+  onRemoveProductPhoto?: (productId: string) => void;
+  onViewProductDetail?: (product: Product) => void;
+  onUpdateStockQuantity?: (productId: string, newQuantity: number) => void;
   reviews: Review[];
   onToggleReviewVisibility: (reviewId: string) => void;
   onDeleteReview: (reviewId: string) => void;
@@ -23,6 +29,7 @@ interface AdminOverviewProps {
   onToggleLanguage: () => void;
   onOpenNotifications: () => void;
   onNavigateToStorefront?: () => void;
+  onNavigateToAiLibrary?: () => void;
   unreadCount: number;
 }
 
@@ -38,6 +45,10 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
   onEditProduct,
   onDeleteProduct,
   onOpenAddProduct,
+  onUpdateProductPhoto,
+  onRemoveProductPhoto,
+  onViewProductDetail,
+  onUpdateStockQuantity,
   reviews,
   onToggleReviewVisibility,
   onDeleteReview,
@@ -48,6 +59,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
   onToggleLanguage,
   onOpenNotifications,
   onNavigateToStorefront,
+  onNavigateToAiLibrary,
   unreadCount,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -106,6 +118,29 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
     showToast(isKannada ? 'ಅಂಗಡಿಯ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ!' : 'Store contact & announcement bar settings saved!');
   };
 
+  const handleCardPhotoUpload = (productId: string, file: File) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (onUpdateProductPhoto) {
+        onUpdateProductPhoto(productId, dataUrl);
+      }
+      showToast(isKannada ? 'ಉತ್ಪನ್ನದ ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ!' : 'Product photograph updated successfully!');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCardPhotoRemove = (prod: Product) => {
+    if (confirm(`Remove photograph for "${prod.name}" and reset to placeholder?`)) {
+      if (onRemoveProductPhoto) {
+        onRemoveProductPhoto(prod.id);
+      } else if (onUpdateProductPhoto) {
+        onUpdateProductPhoto(prod.id, PLACEHOLDER_PRODUCT_IMAGE);
+      }
+      showToast(`Photograph removed for ${prod.name}`);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full pb-20">
       {toastMessage && (
@@ -151,6 +186,18 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
                 className="w-full pl-10 pr-3 py-2 bg-[#f2f3ff] rounded-xl text-[#131b2e] placeholder:text-[#717784] text-[13px] focus:outline-none focus:bg-[#eaedff] border border-[#dae2fd] transition-all"
               />
             </div>
+
+            {/* Quick Batch Upload Button */}
+            {onNavigateToAiLibrary && (
+              <button
+                onClick={() => onNavigateToAiLibrary()}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-bold bg-[#005cb3] hover:bg-[#0b74de] text-white transition-colors shadow-xs"
+                title="Batch Uploading: Drag-and-drop or file selection supporting multiple images simultaneously on desktop and mobile"
+              >
+                <span className="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+                <span>Batch Upload Images</span>
+              </button>
+            )}
 
             {/* Customer Storefront preview link */}
             <button
@@ -199,6 +246,37 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* AI Recommendation Image Library Quick Action Banner */}
+      <div className="mb-8 rounded-2xl bg-gradient-to-r from-[#005cb3] via-[#004f9b] to-[#003164] p-5 lg:p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-[#005cb3]/30">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center shrink-0 border border-white/20">
+            <span className="material-symbols-outlined text-[28px] text-[#6bff8f]">add_photo_alternate</span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap mb-1">
+              <h2 className="font-heading font-bold text-[18px] text-white">
+                {isKannada ? 'ಬ್ಯಾಚ್ ಇಮೇಜ್ ಅಪ್‌ಲೋಡ್ ಮತ್ತು AI ಲೈಬ್ರರಿ' : 'Batch Uploading: Drag-and-Drop or File Selection'}
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#6bff8f]/20 text-[#6bff8f] text-[11px] font-bold border border-[#6bff8f]/30">
+                Multiple Images Simultaneously
+              </span>
+            </div>
+            <p className="text-[13px] text-white/90 max-w-2xl leading-relaxed">
+              {isKannada 
+                ? 'ಡೆಸ್ಕ್‌ಟಾಪ್ ಅಥವಾ ಮೊಬೈಲ್ ಮೂಲಕ ಯಾವುದೇ ವಿವರ ಅಥವಾ ಬೆಲೆ ನಮೂದಿಸದೆ ಏಕಕಾಲದಲ್ಲಿ ಬಹು ಉತ್ಪನ್ನಗಳ ಫೋಟೋಗಳನ್ನು ನೇರವಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.'
+                : 'Batch uploading supporting multiple images simultaneously on desktop and mobile. Upload water purifier, softener, and solar photos directly without entering titles, prices, or technical specs.'}
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => onNavigateToAiLibrary?.()}
+          className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-[#005cb3] hover:bg-[#d6e3ff] font-bold text-[13px] transition-all shadow-md active:scale-95"
+        >
+          <span className="material-symbols-outlined text-[18px]">drive_folder_upload</span>
+          <span>{isKannada ? 'ಬ್ಯಾಚ್ ಅಪ್‌ಲೋಡ್ ತೆರೆಯಿರಿ' : 'Open Batch Uploader'}</span>
+        </button>
       </div>
 
       {/* Dash KPI Grid */}
@@ -470,147 +548,21 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
         </div>
       </div>
 
-      {/* SECTION 2: PRODUCT INVENTORY */}
-      <div className="bg-white rounded-3xl p-5 lg:p-7 shadow-xs border border-[#dae2fd] mb-10">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#dae2fd]">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-[#005cb3] text-[26px]">water_ec</span>
-              <h2 className="font-heading font-bold text-[22px] text-[#131b2e]">
-                {isKannada ? 'ಪ್ಯೂರಿಫೈಯರ್ ಮತ್ತು ಉಪಕರಣಗಳ ದಾಸ್ತಾನು' : 'Purifier & Appliance Inventory'}
-              </h2>
-            </div>
-            <p className="text-[13px] text-[#414753] mt-1">
-              Live Tumakuru warehouse inventory catalog & smart AI matching tags • ದಾಸ್ತಾನು ನಿರ್ವಹಣೆ
-            </p>
-          </div>
-
-          <button
-            onClick={onOpenAddProduct}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#005cb3] text-white rounded-xl hover:bg-[#0b74de] shadow-sm transition-all text-[13px] font-semibold self-start md:self-auto"
-          >
-            <span className="material-symbols-outlined text-[20px]">add_circle</span>
-            <span>{isKannada ? 'ಹೊಸ ಉತ್ಪನ್ನ ಸೇರಿಸಿ' : 'Add New Product (ಹೊಸ ಉತ್ಪನ್ನ)'}</span>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-          {products.map((prod) => (
-            <div
-              key={prod.id}
-              className="bg-[#f2f3ff] rounded-2xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden border border-[#dae2fd]"
-            >
-              <div className="absolute top-4 right-4 z-10">
-                <button
-                  onClick={() => onToggleProductFeatured(prod.id)}
-                  className={`w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-xs transition-colors ${
-                    prod.featured ? 'text-amber-500' : 'text-[#717784] hover:text-amber-500'
-                  }`}
-                  title="Toggle Featured"
-                >
-                  <span className={`material-symbols-outlined text-[18px] ${prod.featured ? 'fill-1' : ''}`}>
-                    star
-                  </span>
-                </button>
-              </div>
-
-              <div className="w-full h-48 rounded-xl bg-white overflow-hidden flex items-center justify-center p-3 mb-4 border border-[#dae2fd]/60">
-                <img
-                  src={prod.image}
-                  alt={prod.name}
-                  className="h-full w-auto object-contain hover:scale-105 transition-transform"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#5ee9ff]/60 text-[#004f58] text-[11px] font-bold">
-                    {prod.category}
-                  </span>
-                  <span className="font-heading font-bold text-[18px] text-[#005cb3] tabular-nums">
-                    ₹{prod.price.toLocaleString('en-IN')}
-                  </span>
-                </div>
-
-                <h3 className="font-heading font-bold text-[16px] text-[#131b2e] leading-snug">
-                  {prod.name}
-                </h3>
-                <p className="text-[12px] text-[#414753] line-clamp-1 mb-2">
-                  {prod.capacity} • {prod.mountType}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {prod.tags.map((tag, tIdx) => (
-                    <span
-                      key={tIdx}
-                      className="px-2 py-0.5 rounded bg-[#eaedff] text-[#414753] font-mono text-[11px]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2 pb-1 flex items-center justify-between gap-1 text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => onToggleProductVisibility(prod.id)}
-                  className={`font-semibold px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors ${
-                    prod.visibleOnStorefront
-                      ? 'bg-[#005cb3]/10 text-[#005cb3] hover:bg-[#005cb3]/20'
-                      : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
-                  }`}
-                  title="Toggle whether customers see this in the public catalog"
-                >
-                  <span>{prod.visibleOnStorefront ? '👁️ Customer Visible' : '🚫 Hidden on Web'}</span>
-                </button>
-                <span className="font-mono font-bold text-[#006c2e] bg-[#6bff8f]/20 px-2 py-0.5 rounded-md">
-                  Stock: {prod.stockQuantity}
-                </span>
-              </div>
-
-              <div className="pt-2 border-t border-[#dae2fd] flex items-center justify-between gap-2">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={prod.inStock}
-                    onChange={() => onToggleProductStock(prod.id)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-9 h-5 bg-[#dae2fd] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white peer-checked:bg-[#006c2e] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all relative"></div>
-                  <span className={`text-[11px] font-bold ${
-                    prod.inStock ? 'text-[#006c2e]' : 'text-[#717784]'
-                  }`}>
-                    {prod.inStock ? 'In Stock' : 'Out'}
-                  </span>
-                </label>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => onEditProduct(prod)}
-                    className="px-2.5 py-1 rounded-lg text-[#005cb3] bg-white border border-[#dae2fd] hover:bg-[#eaedff] text-[11px] font-semibold flex items-center gap-1 transition-colors shadow-2xs"
-                    title="Change Photo & Specifications"
-                  >
-                    <span className="material-symbols-outlined text-[15px]">add_photo_alternate</span>
-                    <span>Edit Photo</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (confirm(`Are you sure you want to delete ${prod.name}?`)) {
-                        onDeleteProduct(prod.id);
-                        showToast(`Deleted ${prod.name}`);
-                      }
-                    }}
-                    className="p-1 rounded-lg text-[#ba1a1a] hover:bg-[#ffdad6] transition-colors"
-                    title="Delete Product"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">delete</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* SECTION 2: PRODUCT MANAGEMENT DASHBOARD */}
+      <div className="mb-10">
+        <ProductManagementDashboard
+          products={products}
+          onOpenAddProduct={onOpenAddProduct}
+          onEditProduct={onEditProduct}
+          onDeleteProduct={onDeleteProduct}
+          onToggleProductVisibility={onToggleProductVisibility}
+          onToggleProductStock={onToggleProductStock}
+          onUpdateProductPhoto={onUpdateProductPhoto}
+          onRemoveProductPhoto={onRemoveProductPhoto}
+          onViewProductDetail={onViewProductDetail}
+          onUpdateStockQuantity={onUpdateStockQuantity}
+          isKannada={isKannada}
+        />
       </div>
 
       {/* SECTION 3: REVIEWS */}

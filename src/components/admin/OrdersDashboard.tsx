@@ -5,6 +5,7 @@ import { Order, OrderStatus } from '../../types';
 import { StatsCards } from './StatsCards';
 import { OrderTable } from './OrderTable';
 import { OrderDetailDrawer } from './OrderDetailDrawer';
+import { AiImageLibrary } from './AiImageLibrary';
 import {
   isSupabaseConfigured,
   SUPABASE_URL,
@@ -39,7 +40,7 @@ export const OrdersDashboard: React.FC<OrdersDashboardProps> = ({
   } = useOrders();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [activeTab, setActiveTab] = useState<'orders' | 'config' | 'sql'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'ai_library' | 'config' | 'sql'>('orders');
 
   // Supabase connection settings form state
   const [customUrl, setCustomUrl] = useState(SUPABASE_URL || '');
@@ -271,6 +272,16 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Direct Upload Images for AI Button in OrdersDashboard Header */}
+          <button
+            onClick={() => setActiveTab('ai_library')}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#005cb3] to-[#00D2FF] hover:from-[#0b74de] hover:to-[#5EE9FF] text-white text-xs font-bold transition-all shadow-xs"
+            title="Upload images for AI Recommendation Analyzer"
+          >
+            <span className="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+            <span>Upload Images (AI)</span>
+          </button>
+
           <button
             onClick={refreshOrders}
             className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
@@ -297,11 +308,15 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
           </button>
 
           <button
-            onClick={logout}
-            className="p-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 transition-colors"
-            title={`Log out (${user?.email})`}
+            onClick={async () => {
+              await logout();
+              onReturnToStorefront();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
+            title={`Log out and Return to Storefront (${user?.email || 'Admin'})`}
           >
-            <span className="material-symbols-outlined text-[18px]">logout</span>
+            <span className="material-symbols-outlined text-[16px]">logout</span>
+            <span className="hidden sm:inline">Sign Out</span>
           </button>
         </div>
       </header>
@@ -309,7 +324,7 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 mb-6 border-b border-slate-200 pb-2">
+        <div className="flex flex-wrap items-center gap-2 mb-6 border-b border-slate-200 pb-2">
           <button
             onClick={() => setActiveTab('orders')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
@@ -320,6 +335,23 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
           >
             <span className="material-symbols-outlined text-[16px]">list_alt</span>
             <span>All Orders ({orders.length})</span>
+          </button>
+
+          {/* OPTION BESIDE ALL ORDERS: Upload Images for AI Recommendation */}
+          <button
+            onClick={() => setActiveTab('ai_library')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border shadow-xs ${
+              activeTab === 'ai_library'
+                ? 'bg-gradient-to-r from-[#06284B] via-[#005cb3] to-[#00D2FF] text-white border-transparent ring-2 ring-[#00D2FF]/60 shadow-md'
+                : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border-emerald-300 font-extrabold'
+            }`}
+            title="Upload product images directly for AI installation recommendations"
+          >
+            <span className="material-symbols-outlined text-[18px] text-emerald-600">add_photo_alternate</span>
+            <span>Upload Images for AI Analyzer</span>
+            <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider animate-pulse">
+              AI Matcher
+            </span>
           </button>
 
           <button
@@ -355,6 +387,35 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
         {/* Tab 1: Orders Management */}
         {activeTab === 'orders' && (
           <div>
+            {/* Direct Upload Callout Beside All Orders */}
+            <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#06284B] via-[#005cb3] to-[#003164] text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-md border border-[#00D2FF]/40">
+              <div className="flex items-start sm:items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+                  <span className="material-symbols-outlined text-[24px] text-[#00FFCC]">add_photo_alternate</span>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h4 className="font-heading font-bold text-sm sm:text-base text-white">
+                      Upload Images to Recommend Through AI Analyzer
+                    </h4>
+                    <span className="px-2 py-0.5 rounded-full bg-[#00FFCC]/20 text-[#00FFCC] text-[10px] font-bold border border-[#00FFCC]/30">
+                      Option Beside All Orders
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-200 mt-1 max-w-2xl leading-relaxed">
+                    Upload water purifier, softener, and solar product photos here. The AI analyzer will recommend <strong>ONLY what you upload</strong> — no other products will be suggested!
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveTab('ai_library')}
+                className="shrink-0 px-4 py-2 bg-[#00FFCC] hover:bg-white text-[#06284B] rounded-xl text-xs font-black transition-all shadow-sm flex items-center gap-2 active:scale-95"
+              >
+                <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
+                <span>Upload Images Now</span>
+              </button>
+            </div>
+
             {/* KPI Stat Cards */}
             <StatsCards orders={orders} />
 
@@ -365,6 +426,33 @@ ALTER TABLE public.orders REPLICA IDENTITY FULL;`;
               onSelectOrder={(order) => setSelectedOrder(order)}
               onQuickUpdateStatus={(orderId, status) => updateStatus(orderId, status)}
             />
+          </div>
+        )}
+
+        {/* Tab: AI Recommendation Image Library */}
+        {activeTab === 'ai_library' && (
+          <div className="space-y-6">
+            <div className="p-4 rounded-2xl bg-[#005cb3]/10 border border-[#005cb3]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-[#005cb3] text-[22px]">auto_awesome</span>
+                <div>
+                  <span className="text-xs font-bold text-[#06284B] block">
+                    AI Visual Product Matching Catalog
+                  </span>
+                  <span className="text-[11px] text-[#414753]">
+                    The customer AI analyzer recommends <strong>ONLY what admin uploads through images</strong>.
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveTab('orders')}
+                className="shrink-0 px-3.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-[#06284B] hover:bg-slate-50 flex items-center gap-1.5 shadow-xs"
+              >
+                <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                <span>Back to All Orders</span>
+              </button>
+            </div>
+            <AiImageLibrary />
           </div>
         )}
 

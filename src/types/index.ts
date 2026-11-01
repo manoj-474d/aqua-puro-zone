@@ -18,26 +18,104 @@ export interface Lead {
   matchedProductId?: string;
   status: LeadStatus;
   notes: string;
-  source: 'Snap & Suggest AI' | 'Live Camera Capture' | 'Web Direct Form' | 'Storefront Walk-in';
+  source: 'Snap & Suggest AI' | 'Live Camera Capture' | 'Web Direct Form' | 'Storefront Walk-in' | 'AI Live Space Analyzer';
+}
+
+export type AiImageCategory =
+  | 'Water Purifier'
+  | 'Kitchen Chimney'
+  | 'Water Softener'
+  | 'Sand Softener'
+  | 'Solar Water Heater'
+  | 'Solar Products'
+  | 'Other';
+
+export interface AiLibraryImage {
+  id: string;
+  image_url: string;
+  category?: AiImageCategory | string;
+  created_at: string;
+  notes?: string;
+  storage_path?: string;
+  is_user_uploaded?: boolean;
+  productColor?: string;
+  productFinish?: string;
+  productType?: string;
+  mountingStyle?: string;
+  proportions?: string;
+}
+
+export interface SpaceAnalysisResult {
+  roomType: string;
+  dominantWallColor: string;
+  wallMaterial: string;
+  lightingCondition: string;
+  visibleWaterPoints: string;
+  visiblePowerPoints: string;
+  spaceClearance: string;
+  obstacles: string[];
+  isClearPhoto: boolean;
+  notes?: string;
+}
+
+export interface VisualRecommendationMatch {
+  image: AiLibraryImage;
+  product?: Product;
+  productName?: string;
+  compatibilityScore: number;
+  colorCompatibilityScore?: number;
+  installationFeasibilityScore?: number;
+  spaceCompatibilityScore?: number;
+  suitabilityReason: string;
+  colorReason?: string;
+  installationNotes?: string;
+  concerns?: string;
+  category: string;
+  needsSpaceConfirmation?: boolean;
 }
 
 export interface Product {
   id: string;
   name: string;
+  slug?: string;
   category: string;
   brand: string;
   price: number;
+  originalPrice?: number;
+  discountPrice?: number;
   capacity: string;
   mountType: string;
   tags: string[];
   image: string;
+  galleryImages?: string[];
   inStock: boolean;
   visibleOnStorefront: boolean;
+  isPublished?: boolean;
   stockQuantity: number;
   featured: boolean;
   description: string;
   features?: string[];
   targetWaterType?: string; // 'Borewell' | 'Municipal' | 'Tanker' | 'All'
+  purificationStages?: string; // e.g. '8-Stage RO + UV + UF + Copper + Alkaline'
+  warranty?: string; // e.g. '1 Year Comprehensive + Free Installation'
+  maxTds?: number | string; // e.g. 'Up to 2000 PPM'
+  flowRate?: string; // e.g. '15 LPH Flow'
+  storageCapacity?: string; // e.g. '10 Litres'
+  createdAt?: string;
+  updatedAt?: string;
+  is_user_uploaded?: boolean;
+  productColor?: string;
+  productFinish?: string;
+}
+
+export function generateProductSlug(name: string, id?: string): string {
+  const base = name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  if (id && !base) return id;
+  return base || 'product';
 }
 
 export interface Review {
@@ -97,7 +175,7 @@ export interface SparePart {
 export type OrderType = 'purchase' | 'service' | 'installation' | 'enquiry';
 export type OrderStatus = 'new' | 'contacted' | 'confirmed' | 'delivered' | 'cancelled';
 export type PaymentStatus = 'pending' | 'paid' | 'partial';
-export type OrderSource = 'website_form' | 'whatsapp' | 'snap_suggest' | 'storefront_walkin';
+export type OrderSource = 'website_form' | 'whatsapp' | 'snap_suggest' | 'storefront_walkin' | 'ai_space_analyzer';
 
 export interface OrderItem {
   id: string;

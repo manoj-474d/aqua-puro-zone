@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ServiceTicket } from '../../types';
+import { submitClientOrder } from '../../lib/supabaseClient';
 
 interface ServiceTicketModalProps {
   isOpen: boolean;
@@ -44,6 +45,17 @@ export const ServiceTicketModal: React.FC<ServiceTicketModalProps> = ({
     };
 
     onSave(newTicket);
+
+    // Also persist directly into Supabase orders table
+    submitClientOrder({
+      customer_name: customerName.trim(),
+      phone: phone.trim(),
+      area: locality,
+      order_type: 'service',
+      notes: `${serviceType} - ${issue.trim() || 'General service & maintenance inspection requested'}. Technician: ${technician}.`,
+      source: 'website_form',
+    });
+
     onClose();
   };
 

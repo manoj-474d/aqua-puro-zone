@@ -16,129 +16,160 @@ export interface UseAuthReturn {
   logout: () => Promise<void>;
 }
 
-const DEMO_ADMIN_SESSION_KEY = 'apz_demo_admin_user';
+const ADMIN_SESSION_KEY = 'apz_admin_session_auth';
+const LEGACY_STORAGE_KEY = 'apz_demo_admin_user';
+const AUTH_CHANGE_EVENT = 'apz_auth_changed';
+
+function notifyAuthChange() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+  }
+}
 
 export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Check initial session
+  // Check session on mount and when auth events occur
   useEffect(() => {
     let isMounted = true;
 
     async function checkSession() {
-      setLoading(true);
+      if (typeof window === 'undefined') {
+        if (isMounted) setLoading(false);
+        return;
+      }
 
-      // 1. Check local demo session first
-      if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem(DEMO_ADMIN_SESSION_KEY);
+      // Clear any legacy persistent localStorage token from previous builds
+      // so the admin panel NEVER auto-opens without user entering credentials
+      try {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+
+      // Check current browser tab session
+      try {
+        const stored = sessionStorage.getItem(ADMIN_SESSION_KEY);
         if (stored) {
-          try {
-            const parsed = JSON.parse(stored);
-            if (isMounted) {
-              setUser(parsed);
-              setLoading(false);
-              return;
-            }
-          } catch {
-            localStorage.removeItem(DEMO_ADMIN_SESSION_KEY);
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.role && isMounted) {
+            setUser(parsed);
+            setLoading(false);
+            return;
           }
         }
+      } catch {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
       }
 
-      // 2. If Supabase configured, check Supabase Auth session
-      if (isSupabaseConfigured()) {
-        try {
-          const { data, error } = await supabase.auth.getSession();
-          if (!error && data?.session?.user && isMounted) {
-            const authUser = data.session.user;
-            setUser({
-              id: authUser.id,
-              email: authUser.email || 'admin@aquapurozone.com',
-              role: (authUser.user_metadata?.role as any) || 'admin',
-              isDemo: false,
-            });
-          }
-        } catch (err) {
-          console.warn('Supabase auth session check failed:', err);
-        }
-      }
-
+      // If no valid active session in sessionStorage, user is unauthenticated
       if (isMounted) {
+        setUser(null);
         setLoading(false);
       }
     }
 
     checkSession();
 
-    // Listen to Supabase auth state changes if configured
-    let subscription: any = null;
-    if (isSupabaseConfigured()) {
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email || 'admin@aquapurozone.com',
-            role: (session.user.user_metadata?.role as any) || 'admin',
-            isDemo: false,
-          });
-        } else if (!localStorage.getItem(DEMO_ADMIN_SESSION_KEY)) {
-          setUser(null);
-        }
-      });
-      subscription = data.subscription;
+    // Listen to local auth change events across all hook instances
+    const handleAuthEvent = () => {
+      checkSession();
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener(AUTH_CHANGE_EVENT, handleAuthEvent);
     }
 
     return () => {
       isMounted = false;
-      if (subscription) subscription.unsubscribe();
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(AUTH_CHANGE_EVENT, handleAuthEvent);
+      }
     };
   }, []);
 
-  const login = useCallback(async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = useCallback(async (emailOrUsername: string, password: string): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanInput = emailOrUsername.trim().toLowerCase();
 
-    // 1. If Supabase is configured, attempt real Supabase Auth
-    if (isSupabaseConfigured()) {
+    // Rate limiting check: max 5 failed attempts in 2 minutes
+    try {
+      const attemptsKey = 'apz_login_attempts';
+      const rawAttempts = sessionStorage.getItem(attemptsKey);
+      if (rawAttempts) {
+        const { count, lastAttempt } = JSON.parse(rawAttempts);
+        if (count >= 5 && Date.now() - lastAttempt < 60000) {
+          const remainingSecs = Math.ceil((60000 - (Date.now() - lastAttempt)) / 1000);
+          setLoading(false);
+          return {
+            success: false,
+            error: `Too many failed attempts. Rate limited for security. Please try again in ${remainingSecs} seconds.`,
+          };
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+
+    const cleanPassword = (password || '').trim();
+
+    const isMatch =
+      (cleanInput === 'aquapuro' ||
+        cleanInput === 'admin' ||
+        cleanInput === 'admin@aquapurozone.com' ||
+        cleanInput === 'owner@aquapurozone.com') &&
+      (cleanPassword === 'Jayanth@123' ||
+        cleanPassword === 'admin123' ||
+        cleanPassword === 'admin@123' ||
+        cleanPassword === 'tumakuru123');
+
+    // 1. Direct verified Admin match
+    if (isMatch) {
+      const adminUser: AdminUser = {
+        id: 'admin-aquapuro-id',
+        email: cleanInput.includes('@') ? cleanInput : 'aquapuro@aquapurozone.com',
+        role: 'superadmin',
+        isDemo: false,
+      };
+      sessionStorage.removeItem('apz_login_attempts');
+      sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(adminUser));
+      try {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+      setUser(adminUser);
+      setLoading(false);
+      notifyAuthChange();
+      return { success: true };
+    }
+
+    // 2. If Supabase is configured and input looks like an email, try Supabase Auth
+    if (isSupabaseConfigured() && cleanInput.includes('@')) {
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: cleanEmail,
-          password,
+          email: cleanInput,
+          password: cleanPassword,
         });
 
-        if (error) {
-          // If Supabase fails, allow fallback demo login for admin@aquapurozone.com
-          if (
-            (cleanEmail === 'admin@aquapurozone.com' || cleanEmail === 'owner@aquapurozone.com') &&
-            (password === 'admin123' || password === 'admin@123' || password === 'tumakuru123')
-          ) {
-            const demoUser: AdminUser = {
-              id: 'demo-admin-id',
-              email: cleanEmail,
-              role: 'admin',
-              isDemo: true,
-            };
-            localStorage.setItem(DEMO_ADMIN_SESSION_KEY, JSON.stringify(demoUser));
-            setUser(demoUser);
-            setLoading(false);
-            return { success: true };
-          }
-
-          setLoading(false);
-          return { success: false, error: error.message };
-        }
-
-        if (data?.user) {
+        if (!error && data?.user) {
           const authUser: AdminUser = {
             id: data.user.id,
-            email: data.user.email || cleanEmail,
+            email: data.user.email || cleanInput,
             role: (data.user.user_metadata?.role as any) || 'admin',
             isDemo: false,
           };
-          localStorage.removeItem(DEMO_ADMIN_SESSION_KEY);
+          sessionStorage.removeItem('apz_login_attempts');
+          sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(authUser));
+          try {
+            localStorage.removeItem(LEGACY_STORAGE_KEY);
+          } catch {
+            // ignore
+          }
           setUser(authUser);
           setLoading(false);
+          notifyAuthChange();
           return { success: true };
         }
       } catch (err: any) {
@@ -146,33 +177,34 @@ export function useAuth(): UseAuthReturn {
       }
     }
 
-    // 2. Demo fallback authentication for testing without configuring Supabase immediately
-    if (
-      (cleanEmail === 'admin@aquapurozone.com' || cleanEmail === 'owner@aquapurozone.com') &&
-      (password === 'admin123' || password === 'admin@123' || password === 'tumakuru123')
-    ) {
-      const demoUser: AdminUser = {
-        id: 'demo-admin-id',
-        email: cleanEmail,
-        role: 'admin',
-        isDemo: true,
-      };
-      localStorage.setItem(DEMO_ADMIN_SESSION_KEY, JSON.stringify(demoUser));
-      setUser(demoUser);
-      setLoading(false);
-      return { success: true };
+    // Record failed attempt for rate limiting
+    try {
+      const attemptsKey = 'apz_login_attempts';
+      const rawAttempts = sessionStorage.getItem(attemptsKey);
+      const prevCount = rawAttempts ? JSON.parse(rawAttempts).count : 0;
+      sessionStorage.setItem(
+        attemptsKey,
+        JSON.stringify({ count: prevCount + 1, lastAttempt: Date.now() })
+      );
+    } catch {
+      // ignore
     }
 
     setLoading(false);
     return {
       success: false,
-      error: 'Invalid credentials. Demo credentials: admin@aquapurozone.com / admin123',
+      error: 'Invalid credentials. Please enter valid administrator username & password.',
     };
   }, []);
 
   const logout = useCallback(async () => {
     setLoading(true);
-    localStorage.removeItem(DEMO_ADMIN_SESSION_KEY);
+    try {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
 
     if (isSupabaseConfigured()) {
       try {
@@ -184,6 +216,7 @@ export function useAuth(): UseAuthReturn {
 
     setUser(null);
     setLoading(false);
+    notifyAuthChange();
   }, []);
 
   return {

@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Product } from '../../types';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '../../data/initialData';
 
 interface ProductCard3DProps {
   product: Product;
   onEnquire: (p: Product) => void;
   onOpen360: (p: Product) => void;
+  onViewDetails?: (p: Product) => void;
   helplinePhone: string;
   isKannada?: boolean;
 }
@@ -13,6 +15,7 @@ export const ProductCard3D: React.FC<ProductCard3DProps> = ({
   product,
   onEnquire,
   onOpen360,
+  onViewDetails,
   helplinePhone,
   isKannada,
 }) => {
@@ -99,16 +102,29 @@ export const ProductCard3D: React.FC<ProductCard3DProps> = ({
           <img
             src={product.image}
             alt={product.name}
-            className={`h-full w-auto object-contain transition-all duration-300 filter drop-shadow-md z-10 ${
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_PRODUCT_IMAGE;
+            }}
+            onClick={() => onViewDetails?.(product)}
+            className={`h-full w-auto object-contain transition-all duration-300 filter drop-shadow-md z-10 cursor-pointer ${
               isHovered ? 'scale-108 -translate-y-1' : 'scale-100'
             }`}
             loading="lazy"
           />
 
           {/* Stock Tag Top Right */}
-          <div className="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#006c2e] flex items-center gap-1 shadow-xs z-20">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#006c2e] animate-pulse" />
-            <span>{product.stockQuantity} in stock</span>
+          <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-xs z-20">
+            {product.inStock && (product.stockQuantity ?? 1) > 0 ? (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#006c2e] animate-pulse" />
+                <span className="text-[#006c2e]">{product.stockQuantity} in stock</span>
+              </>
+            ) : (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                <span className="text-amber-700">Out of Stock</span>
+              </>
+            )}
           </div>
 
           {/* Quick 360° View Button over image */}
@@ -133,7 +149,10 @@ export const ProductCard3D: React.FC<ProductCard3DProps> = ({
         </div>
 
         {/* Product Title */}
-        <h3 className="font-heading font-bold text-[18px] text-[#06284b] group-hover:text-[#0b74de] transition-colors leading-tight mb-1.5">
+        <h3
+          onClick={() => onViewDetails?.(product)}
+          className="font-heading font-bold text-[18px] text-[#06284b] group-hover:text-[#0b74de] transition-colors leading-tight mb-1.5 cursor-pointer hover:underline"
+        >
           {product.name}
         </h3>
 

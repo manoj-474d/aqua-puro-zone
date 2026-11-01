@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { SparePart, Product } from '../types';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '../data/initialData';
 
 interface StockInventoryViewProps {
   spareParts: SparePart[];
   products: Product[];
   onUpdatePartStock: (partId: string, delta: number) => void;
   onAddPart: (part: SparePart) => void;
+  onUpdateProductPhoto?: (productId: string, newImageUrl: string) => void;
+  onRemoveProductPhoto?: (productId: string) => void;
+  onEditProduct?: (product: Product) => void;
+  onDeleteProduct?: (productId: string) => void;
+  onOpenAddProduct?: () => void;
   isKannada: boolean;
 }
 
@@ -14,6 +20,11 @@ export const StockInventoryView: React.FC<StockInventoryViewProps> = ({
   products,
   onUpdatePartStock,
   onAddPart,
+  onUpdateProductPhoto,
+  onRemoveProductPhoto,
+  onEditProduct,
+  onDeleteProduct,
+  onOpenAddProduct,
   isKannada,
 }) => {
   const [activeTab, setActiveTab] = useState<'parts' | 'appliances'>('parts');
@@ -236,28 +247,228 @@ export const StockInventoryView: React.FC<StockInventoryViewProps> = ({
           </div>
         </div>
       ) : (
-        /* Appliances Grid */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p) => (
-            <div key={p.id} className="bg-white rounded-2xl p-5 shadow-xs border border-[#dae2fd]">
-              <div className="w-full h-40 bg-[#f2f3ff] rounded-xl flex items-center justify-center p-3 mb-3">
-                <img src={p.image} alt={p.name} className="h-full object-contain" />
-              </div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-[#006875] bg-[#5ee9ff]/30 px-2 py-0.5 rounded-full">
-                  {p.category}
-                </span>
-                <span className={`text-[11px] font-bold ${p.inStock ? 'text-[#006c2e]' : 'text-[#ba1a1a]'}`}>
-                  {p.inStock ? '● In Stock' : '○ Out of Stock'}
-                </span>
-              </div>
-              <h3 className="font-heading font-bold text-[15px] text-[#131b2e]">{p.name}</h3>
-              <p className="text-[12px] text-[#414753] line-clamp-1 mt-1">{p.capacity}</p>
-              <div className="font-heading font-extrabold text-[16px] text-[#005cb3] mt-2">
-                ₹{p.price.toLocaleString('en-IN')}
-              </div>
+        /* Appliances Grid with 2-Grid Layout and Direct Management */
+        <div className="space-y-6">
+          {/* Action Bar for Adding Products / Water Purifiers */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white rounded-2xl border border-[#dae2fd]">
+            <div>
+              <h2 className="font-heading font-bold text-[16px] text-[#131b2e]">
+                {isKannada ? 'ವಾಟರ್ ಪ್ಯೂರಿಫೈಯರ್ ಮತ್ತು ಉಪಕರಣಗಳ ಕ್ಯಾಟಲಾಗ್' : 'Water Purifier & Appliance Catalog'}
+              </h2>
+              <p className="text-[12px] text-[#717784]">
+                {isKannada ? 'ಉತ್ಪನ್ನ ವಿವರಗಳನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಲು, ಹೊಸ ಪ್ಯೂರಿಫೈಯರ್ ಸೇರಿಸಲು ಮತ್ತು ತೆಗೆದುಹಾಕಲು ನಿರ್ವಾಹಕ ಆಯ್ಕೆಗಳು' : 'Admin full control: add more purifiers, edit specifications, or remove products'}
+              </p>
             </div>
-          ))}
+
+            <div className="flex items-center gap-2">
+              {onOpenAddProduct && (
+                <>
+                  <button
+                    type="button"
+                    onClick={onOpenAddProduct}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#006c2e] hover:bg-[#00883c] text-white rounded-xl shadow-xs transition-all text-[12px] font-bold"
+                  >
+                    <span className="material-symbols-outlined text-[17px]">water_drop</span>
+                    <span>{isKannada ? '+ ವಾಟರ್ ಪ್ಯೂರಿಫೈಯರ್' : '+ Add Water Purifier'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={onOpenAddProduct}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#005cb3] hover:bg-[#0b74de] text-white rounded-xl shadow-xs transition-all text-[12px] font-bold"
+                  >
+                    <span className="material-symbols-outlined text-[17px]">add_circle</span>
+                    <span>{isKannada ? '+ ಹೊಸ ಉತ್ಪನ್ನ' : '+ Add Product'}</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* 2-Column Product Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {products.map((p) => (
+              <div key={p.id} className="bg-white rounded-2xl p-5 shadow-xs border border-[#dae2fd] flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                  <div className="w-full h-48 bg-[#f2f3ff] rounded-xl flex items-center justify-center p-3 mb-3 border border-[#dae2fd]/60 relative group overflow-hidden">
+                    <img
+                      src={p.image || PLACEHOLDER_PRODUCT_IMAGE}
+                      alt={p.name}
+                      className="h-full object-contain transition-transform group-hover:scale-105"
+                    />
+
+                    {/* Hover Quick Action for photo */}
+                    <div className="absolute inset-x-2 bottom-2 bg-slate-900/85 backdrop-blur-xs rounded-xl p-1.5 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                      <label className="flex items-center gap-1 px-2.5 py-1 bg-[#005cb3] hover:bg-[#0b74de] text-white rounded-lg text-[11px] font-bold cursor-pointer transition-colors">
+                        <span className="material-symbols-outlined text-[14px]">upload</span>
+                        <span>Change Photo</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file && onUpdateProductPhoto) {
+                              const reader = new FileReader();
+                              reader.onload = (ev) => {
+                                onUpdateProductPhoto(p.id, ev.target?.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+
+                      {p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm(`Remove photo for "${p.name}"?`)) {
+                              if (onRemoveProductPhoto) {
+                                onRemoveProductPhoto(p.id);
+                              } else if (onUpdateProductPhoto) {
+                                onUpdateProductPhoto(p.id, PLACEHOLDER_PRODUCT_IMAGE);
+                              }
+                            }
+                          }}
+                          className="flex items-center gap-1 px-2 py-1 bg-red-600/90 hover:bg-red-600 text-white rounded-lg text-[11px] font-bold transition-colors cursor-pointer"
+                          title="Remove current photo"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">delete</span>
+                          <span>Remove</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {(!p.image || p.image === PLACEHOLDER_PRODUCT_IMAGE) && (
+                      <span className="absolute top-2 left-2 bg-amber-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+                        No Photo
+                      </span>
+                    )}
+
+                    {p.targetWaterType && (
+                      <span className="absolute top-2 right-2 bg-white/95 text-[#006c2e] text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs border border-slate-200">
+                        {p.targetWaterType}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[11px] font-bold text-[#006875] bg-[#5ee9ff]/30 px-2.5 py-0.5 rounded-full">
+                      {p.category}
+                    </span>
+                    <span className={`text-[11px] font-bold ${p.inStock ? 'text-[#006c2e]' : 'text-[#ba1a1a]'}`}>
+                      {p.inStock ? `● ${p.stockQuantity} in Stock` : '○ Out of Stock'}
+                    </span>
+                  </div>
+
+                  <h3 className="font-heading font-bold text-[16px] text-[#131b2e] leading-snug">{p.name}</h3>
+                  <p className="text-[12px] text-[#414753] line-clamp-1 mt-1">{p.capacity} • {p.mountType}</p>
+
+                  {/* Specifications details pill */}
+                  {p.purificationStages && (
+                    <div className="mt-2 text-[11px] font-medium text-[#005cb3] bg-[#e0f2fe]/60 border border-[#27c4d9]/30 px-2.5 py-1 rounded-lg">
+                      <span className="font-bold">Filtration:</span> {p.purificationStages}
+                    </div>
+                  )}
+
+                  {p.warranty && (
+                    <div className="mt-1 text-[11px] text-[#006c2e] bg-[#6bff8f]/20 px-2.5 py-0.5 rounded-md">
+                      <span className="font-bold">Warranty:</span> {p.warranty}
+                    </div>
+                  )}
+
+                  <div className="flex items-baseline gap-2 mt-2">
+                    <span className="font-heading font-extrabold text-[18px] text-[#005cb3]">
+                      ₹{p.price.toLocaleString('en-IN')}
+                    </span>
+                    {p.originalPrice && p.originalPrice > p.price && (
+                      <span className="text-[12px] text-[#717784] line-through">
+                        ₹{p.originalPrice.toLocaleString('en-IN')}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons: Edit Details, Remove Product, Photo Upload */}
+                <div className="mt-4 pt-3 border-t border-[#dae2fd] flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <label
+                      className="px-2.5 py-1 rounded-lg text-[#005cb3] bg-[#f2f3ff] hover:bg-[#eaedff] border border-[#dae2fd] text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                      title="Upload New Photo"
+                    >
+                      <span className="material-symbols-outlined text-[15px]">add_a_photo</span>
+                      <span>Photo</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file && onUpdateProductPhoto) {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              onUpdateProductPhoto(p.id, ev.target?.result as string);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Remove photo for "${p.name}"?`)) {
+                            if (onRemoveProductPhoto) {
+                              onRemoveProductPhoto(p.id);
+                            } else if (onUpdateProductPhoto) {
+                              onUpdateProductPhoto(p.id, PLACEHOLDER_PRODUCT_IMAGE);
+                            }
+                          }
+                        }}
+                        className="p-1 rounded-lg text-slate-500 hover:text-[#ba1a1a] hover:bg-[#ffdad6] transition-colors cursor-pointer"
+                        title="Remove Photo"
+                      >
+                        <span className="material-symbols-outlined text-[17px]">no_photography</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    {onEditProduct && (
+                      <button
+                        type="button"
+                        onClick={() => onEditProduct(p)}
+                        className="px-3 py-1 bg-white hover:bg-slate-50 text-[#005cb3] border border-[#dae2fd] rounded-lg text-[11px] font-bold transition-colors flex items-center gap-1 shadow-2xs"
+                        title="Edit all product specifications & details"
+                      >
+                        <span className="material-symbols-outlined text-[15px]">edit</span>
+                        <span>Edit Details</span>
+                      </button>
+                    )}
+
+                    {onDeleteProduct && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Are you sure you want to remove and delete "${p.name}" from inventory?`)) {
+                            onDeleteProduct(p.id);
+                          }
+                        }}
+                        className="px-2.5 py-1 bg-[#ffdad6]/60 hover:bg-[#ffdad6] text-[#ba1a1a] border border-[#ffdad6] rounded-lg text-[11px] font-bold transition-colors flex items-center gap-1"
+                        title="Remove product permanently"
+                      >
+                        <span className="material-symbols-outlined text-[15px]">delete</span>
+                        <span>Remove</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

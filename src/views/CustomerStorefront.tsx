@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Product, Review, StoreSettings, Lead, OrderType } from '../types';
 import { BRAND_LOGO_URL } from '../data/initialData';
+import { BrandLogo } from '../components/BrandLogo';
 import { submitClientOrder, isSupabaseConfigured } from '../lib/supabaseClient';
-import { LiveCameraSection } from '../components/LiveCameraSection';
+import { AiLiveSpaceAnalyzer } from '../components/AiLiveSpaceAnalyzer';
 import { HeroPurifier } from '../components/animations/HeroPurifier';
-import { PurificationProcess } from '../components/animations/PurificationProcess';
-import { BeforeAfterSlider } from '../components/animations/BeforeAfterSlider';
 import { ProductCard3D } from '../components/animations/ProductCard3D';
 import { Product360Modal } from '../components/animations/Product360Modal';
 import { WaveDivider } from '../components/animations/WaveDivider';
 import { WaterCursorTrail } from '../components/animations/WaterCursorTrail';
 import { WaterLoader } from '../components/animations/WaterLoader';
 import { OrderFormModal } from '../components/orders/OrderFormModal';
-import { SupabaseConnectModal } from '../components/Modals/SupabaseConnectModal';
 
 interface CustomerStorefrontProps {
   products: Product[];
@@ -20,6 +18,7 @@ interface CustomerStorefrontProps {
   settings: StoreSettings;
   onReturnToAdmin: () => void;
   onSubmitLead: (lead: Lead) => void;
+  onSelectProduct?: (product: Product) => void;
   isKannada: boolean;
   onToggleLanguage: () => void;
 }
@@ -30,6 +29,7 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
   settings,
   onReturnToAdmin,
   onSubmitLead,
+  onSelectProduct,
   isKannada,
   onToggleLanguage,
 }) => {
@@ -48,7 +48,6 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [orderModalProduct, setOrderModalProduct] = useState<Product | null>(null);
   const [orderModalType, setOrderModalType] = useState<OrderType>('purchase');
-  const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
 
   // Active filter for products
   const [categoryFilter, setCategoryFilter] = useState<string>('All');
@@ -114,7 +113,27 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
   // Filtered products list
   const filteredProducts = visibleProducts.filter((p) => {
     if (categoryFilter === 'All') return true;
-    return p.category.toLowerCase().includes(categoryFilter.toLowerCase());
+    const catLow = p.category.toLowerCase();
+    const filterLow = categoryFilter.toLowerCase();
+    if (filterLow === 'ro system') {
+      return catLow.includes('ro') || p.tags.some((t) => t.includes('ro')) || p.name.toLowerCase().includes('ro');
+    }
+    if (filterLow === 'water purifier') {
+      return catLow.includes('purifier');
+    }
+    if (filterLow === 'water softener') {
+      return catLow.includes('softener');
+    }
+    if (filterLow === 'kitchen chimney') {
+      return catLow.includes('chimney');
+    }
+    if (filterLow === 'solar system') {
+      return catLow.includes('solar');
+    }
+    if (filterLow === 'commercial ro') {
+      return catLow.includes('commercial');
+    }
+    return catLow.includes(filterLow);
   });
 
   const heroFeaturedProduct = visibleProducts[0] || products[0];
@@ -148,28 +167,14 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
       {/* 2. Customer Navigation Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-3">
-          <img src={BRAND_LOGO_URL} alt="Aqua Puro Zone" className="h-8 w-auto object-contain" />
-          <div className="flex flex-col">
-            <span className="font-heading font-extrabold text-[17px] text-[#06284b] leading-tight">
-              Aqua Puro Zone
-            </span>
-            <span className="text-[11px] text-[#414753] font-medium hidden sm:inline">
-              Tumakuru • Sira Gate Store
-            </span>
-          </div>
+          <BrandLogo variant="full" size="sm" />
         </div>
 
         {/* Navigation Quick Links */}
-        <nav className="hidden lg:flex items-center gap-7 text-[13px] font-semibold text-[#414753]">
-          <a href="#how-it-purifies" className="hover:text-[#0b74de] transition-colors">
-            How It Purifies
-          </a>
-          <a href="#water-clarity" className="hover:text-[#0b74de] transition-colors">
-            TDS Test &amp; Clarity
-          </a>
-          <a href="#live-photo-section" className="text-[#0b74de] hover:underline flex items-center gap-1.5 font-bold">
-            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
-            <span>Live Photo AI</span>
+        <nav className="hidden lg:flex items-center gap-6 text-[13px] font-semibold text-[#414753]">
+          <a href="#ai-space-analyzer" className="text-[#00A3FF] hover:text-[#06284b] flex items-center gap-1.5 font-bold px-2.5 py-1 rounded-full bg-[#00D2FF]/10 border border-[#00D2FF]/30">
+            <span className="material-symbols-outlined text-[17px] text-[#00A3FF]">center_focus_strong</span>
+            <span>AI Space Analysis</span>
           </a>
           <a href="#visible-products" className="hover:text-[#0b74de] transition-colors">
             In-Stock Catalog ({visibleProducts.length})
@@ -198,24 +203,6 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
             <span>{isKannada ? 'ಕನ್ನಡ' : 'English'}</span>
           </button>
 
-          {/* Supabase Connection Status Pill */}
-          <button
-            onClick={() => setIsSupabaseModalOpen(true)}
-            className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
-              isSupabaseConfigured()
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
-                : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
-            }`}
-            title={isSupabaseConfigured() ? 'Supabase Database Connected' : 'Supabase Not Connected: Click to Setup'}
-          >
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isSupabaseConfigured() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
-              }`}
-            />
-            <span>{isSupabaseConfigured() ? 'Supabase Live' : 'Connect Supabase'}</span>
-          </button>
-
           <a
             href={`https://wa.me/${cleanWaNumber}?text=${encodeURIComponent('Hello Aqua Puro Zone Tumakuru, I want to inquire about an in-stock water purifier.')}`}
             target="_blank"
@@ -226,26 +213,26 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
             <span className="hidden sm:inline">WhatsApp Desk</span>
           </a>
 
-          {/* Dedicated Owner Admin Panel Switcher */}
+          {/* Dedicated Owner Admin Portal Switcher */}
           <button
             onClick={onReturnToAdmin}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#06284b] hover:bg-[#0b74de] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
-            title="Switch to Dedicated Owner Admin Panel"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#06284b] hover:bg-[#0b74de] text-white rounded-xl text-xs font-bold shadow-xs transition-all border border-[#27c4d9]/40 hover:scale-105 cursor-pointer"
+            title="Administrator Sign In"
           >
-            <span className="material-symbols-outlined text-[15px]">tune</span>
-            <span className="hidden md:inline">Admin Panel</span>
+            <span className="material-symbols-outlined text-[16px] text-[#27c4d9]">lock</span>
+            <span className="font-semibold">Admin Sign In</span>
           </button>
         </div>
       </header>
 
-      {/* 3. HERO SHOWCASE WITH HERO PURIFIER CENTERPIECE */}
-      <section className="relative px-4 sm:px-8 pt-10 pb-16 lg:pt-14 lg:pb-20 max-w-7xl mx-auto w-full">
+      {/* 3. HERO SHOWCASE WITH REALISTIC WATER PURIFIER PRESENTATION */}
+      <section id="hero" className="relative px-4 sm:px-8 pt-10 pb-16 lg:pt-14 lg:pb-20 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Hero Copy */}
           <div className="lg:col-span-6 space-y-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#27c4d9]/20 text-[#06284b] text-[12px] font-bold border border-[#27c4d9]/40">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#00D2FF]/15 text-[#06284B] text-[12px] font-bold border border-[#00D2FF]/40">
               <span className="w-2.5 h-2.5 rounded-full bg-[#006c2e] animate-ping" />
-              <span>{isKannada ? 'ಲೈವ್ ಫೋಟೋ AI ತಂತ್ರಜ್ಞಾನ • ತಕ್ಷಣದ ದಾಸ್ತಾನು ಲಭ್ಯತೆ' : 'Tumakuru\'s #1 Mineral RO Showcase'}</span>
+              <span>{isKannada ? 'ಲೈವ್ ಫೋಟೋ AI ತಂತ್ರಜ್ಞಾನ • ತಕ್ಷಣದ ದಾಸ್ತಾನು ಲಭ್ಯತೆ' : 'Tumakuru\'s #1 Water Technology Platform'}</span>
             </div>
 
             <h1 className="font-heading font-extrabold text-[36px] sm:text-[48px] text-[#06284b] leading-[1.15] tracking-tight">
@@ -268,19 +255,19 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
               </button>
 
               <a
-                href="#live-photo-section"
-                className="px-6 py-3.5 bg-white hover:bg-[#f0f9ff] text-[#06284b] border border-[#27c4d9]/50 rounded-xl text-[14px] font-bold transition-all flex items-center gap-2 shadow-xs hover:border-[#0b74de]"
+                href="#ai-space-analyzer"
+                className="px-6 py-3.5 bg-gradient-to-r from-[#00D2FF]/20 to-[#0B74DE]/20 hover:from-[#00D2FF]/30 hover:to-[#0B74DE]/30 text-[#06284b] border border-[#00D2FF]/60 rounded-xl text-[14px] font-bold transition-all flex items-center gap-2 shadow-xs"
               >
-                <span className="material-symbols-outlined text-[20px] text-[#0b74de]">photo_camera</span>
-                <span>{isKannada ? 'ಲೈವ್ ಫೋಟೋ ತೆಗೆಯಿರಿ' : 'Take Live Photo Scan'}</span>
+                <span className="material-symbols-outlined text-[20px] text-[#00A3FF]">center_focus_strong</span>
+                <span>{isKannada ? 'AI ಸ್ಥಳ ತಪಾಸಣೆ' : 'AI Live Space Analysis'}</span>
               </a>
 
               <a
-                href="#how-it-purifies"
+                href="#visible-products"
                 className="px-6 py-3.5 bg-white hover:bg-[#f0f9ff] text-[#06284b] border border-[#27c4d9]/50 rounded-xl text-[14px] font-bold transition-all flex items-center gap-2 shadow-xs hover:border-[#0b74de]"
               >
-                <span className="material-symbols-outlined text-[20px] text-[#0b74de]">biotech</span>
-                <span>Inside 6-Stage Filtration</span>
+                <span className="material-symbols-outlined text-[20px] text-[#0b74de]">water_drop</span>
+                <span>{isKannada ? 'ಲಭ್ಯವಿರುವ ಯಂತ್ರಗಳು' : 'Browse In-Stock Units'}</span>
               </a>
             </div>
 
@@ -310,7 +297,7 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
             </div>
           </div>
 
-          {/* Right Hero Purifier 3D Showcase */}
+          {/* Right Hero Purifier Presentation */}
           <div className="lg:col-span-6">
             <HeroPurifier
               imageSrc={heroFeaturedProduct.image}
@@ -324,27 +311,15 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
       </section>
 
       {/* Wave Transition */}
-      <WaveDivider colorTop="#faf8ff" colorBottom="#ffffff" />
+      <WaveDivider colorTop="#faf8ff" colorBottom="#faf8ff" />
 
-      {/* 4. "HOW IT PURIFIES" INTERACTIVE 6-STAGE CUTAWAY SCROLL ANIMATION */}
-      <div id="how-it-purifies" className="bg-white">
-        <PurificationProcess />
-      </div>
-
-      {/* Wave Transition */}
-      <WaveDivider colorTop="#ffffff" colorBottom="#faf8ff" />
-
-      {/* 5. BEFORE / AFTER SPLIT-GLASS WATER CLARITY SLIDER & ANIMATED TDS METER */}
-      <div id="water-clarity">
-        <BeforeAfterSlider />
-      </div>
-
-      {/* 6. DEDICATED LIVE CAMERA PHOTO SCANNER & AR PURIFIER PROJECTION */}
-      <LiveCameraSection
+      {/* 5. AI LIVE SPACE ANALYSIS & VIRTUAL IN-SITU PROJECTION */}
+      <AiLiveSpaceAnalyzer
         products={products}
         onSubmitLead={onSubmitLead}
         whatsappNumber={settings.whatsappNumber}
         isKannada={isKannada}
+        onSelectProductForDetail={onSelectProduct}
       />
 
       {/* 7. VISIBLE PRODUCTS CATALOG WITH 3D HOVER TILT, WATER FILL & 360° VIEW */}
@@ -366,18 +341,26 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
           </div>
 
           {/* Category Filter Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-[#f0f4ff] rounded-xl border border-slate-200 shrink-0">
-            {['All', 'Water Purifier', 'Softener', 'Chimney'].map((cat) => (
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#f0f4ff] rounded-2xl border border-slate-200">
+            {[
+              { id: 'All', label: 'All Catalog' },
+              { id: 'Water Purifier', label: '💧 Water Purifiers' },
+              { id: 'RO System', label: '⚡ RO Systems' },
+              { id: 'Water Softener', label: '🛡️ Softeners' },
+              { id: 'Kitchen Chimney', label: '🍳 Chimneys' },
+              { id: 'Solar System', label: '☀️ Solar Systems' },
+              { id: 'Commercial RO', label: '🏭 Commercial RO' },
+            ].map((cat) => (
               <button
-                key={cat}
-                onClick={() => setCategoryFilter(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  categoryFilter === cat
-                    ? 'bg-white text-[#06284b] shadow-xs'
-                    : 'text-[#414753] hover:text-[#06284b]'
+                key={cat.id}
+                onClick={() => setCategoryFilter(cat.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  categoryFilter === cat.id
+                    ? 'bg-[#00D2FF] text-[#0A192F] shadow-sm font-extrabold'
+                    : 'text-[#414753] hover:text-[#06284b] hover:bg-white/60'
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -398,13 +381,14 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {filteredProducts.map((p) => (
               <ProductCard3D
                 key={p.id}
                 product={p}
                 onEnquire={handleEnquireProduct}
                 onOpen360={handleOpen360}
+                onViewDetails={onSelectProduct}
                 helplinePhone={settings.helplinePhone}
                 isKannada={isKannada}
               />
@@ -609,10 +593,10 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
             </p>
             <button
               onClick={onReturnToAdmin}
-              className="mt-4 px-4 py-2 bg-[#0b74de] hover:bg-[#27c4d9] hover:text-[#06284b] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+              className="mt-4 px-4 py-2 bg-[#0b74de] hover:bg-[#27c4d9] hover:text-[#06284b] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[16px]">tune</span>
-              <span>Open Dedicated Owner Admin Panel</span>
+              <span className="material-symbols-outlined text-[16px]">lock</span>
+              <span>Staff &amp; Admin Sign In</span>
             </button>
           </div>
         </div>
@@ -635,7 +619,7 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
         />
       )}
 
-      {/* Supabase Client Orders & Service Booking Modal */}
+      {/* Client Orders & Service Booking Modal */}
       <OrderFormModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
@@ -644,12 +628,6 @@ export const CustomerStorefront: React.FC<CustomerStorefrontProps> = ({
         initialOrderType={orderModalType}
         whatsappNumber={settings.whatsappNumber}
         isKannada={isKannada}
-      />
-
-      {/* Supabase Connection Setup & Diagnostic Modal */}
-      <SupabaseConnectModal
-        isOpen={isSupabaseModalOpen}
-        onClose={() => setIsSupabaseModalOpen(false)}
       />
     </div>
   );

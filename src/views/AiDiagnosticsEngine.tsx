@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lead } from '../types';
+import { submitClientOrder } from '../lib/supabaseClient';
 
 interface AiDiagnosticsEngineProps {
   onAddLead: (lead: Lead) => void;
@@ -114,12 +115,16 @@ export const AiDiagnosticsEngine: React.FC<AiDiagnosticsEngineProps> = ({
   const handlePushToLeads = () => {
     if (!diagnosticResult) return;
 
+    const leadCustomer = customerName || 'Walk-in Customer';
+    const leadPhone = phone || '+91 82962 64007';
+    const leadLocality = locality || 'Tumakuru Urban';
+
     const newLead: Lead = {
       id: `lead-${Date.now()}`,
       timestamp: 'Just now',
-      customerName: customerName || 'Walk-in Customer',
-      phone: phone || '+91 82962 64007',
-      locality: locality || 'Tumakuru Urban',
+      customerName: leadCustomer,
+      phone: leadPhone,
+      locality: leadLocality,
       spaceImage: activeSpace.image,
       spaceTitle: activeSpace.title,
       waterSource: waterSource,
@@ -133,6 +138,17 @@ export const AiDiagnosticsEngine: React.FC<AiDiagnosticsEngineProps> = ({
     };
 
     onAddLead(newLead);
+
+    // Also persist directly into Supabase orders table
+    submitClientOrder({
+      customer_name: leadCustomer,
+      phone: leadPhone,
+      area: leadLocality,
+      order_type: 'purchase',
+      notes: `AI Diagnosed TDS: ${tdsPpm} PPM. Recommended ${diagnosticResult.productMatch}.`,
+      source: 'snap_suggest',
+    });
+
     setSavedToLeads(true);
   };
 
@@ -166,11 +182,18 @@ export const AiDiagnosticsEngine: React.FC<AiDiagnosticsEngineProps> = ({
               <span className="font-heading font-bold text-[15px] text-[#131b2e]">
                 1. Installation Space or Water Sample
               </span>
-              <label className="text-[11px] font-semibold text-[#005cb3] bg-[#e2e7ff] hover:bg-[#dae2fd] px-2.5 py-1 rounded-lg cursor-pointer transition-colors flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px]">upload_file</span>
-                <span>Upload Custom</span>
-                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label className="text-[11px] font-semibold text-white bg-[#006c2e] hover:bg-[#00883c] px-2.5 py-1 rounded-lg cursor-pointer transition-colors flex items-center gap-1 shadow-2xs">
+                  <span className="material-symbols-outlined text-[14px]">photo_camera</span>
+                  <span>Click Camera</span>
+                  <input type="file" accept="image/*" capture="environment" onChange={handleImageUpload} className="hidden" />
+                </label>
+                <label className="text-[11px] font-semibold text-[#005cb3] bg-[#e2e7ff] hover:bg-[#dae2fd] px-2.5 py-1 rounded-lg cursor-pointer transition-colors flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">upload_file</span>
+                  <span>Upload File</span>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                </label>
+              </div>
             </div>
 
             <div className="relative w-full h-64 rounded-2xl overflow-hidden bg-[#131b2e] border border-[#dae2fd] flex items-center justify-center">

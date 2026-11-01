@@ -1,6 +1,10 @@
 import { Lead, Product, Review, StoreSettings, ServiceTicket, SparePart } from '../types';
 
-export const BRAND_LOGO_URL = 'https://lh3.googleusercontent.com/aida/AEtjO1XivslyELLnT9x6MJBtbop1Abm-l0-qL7r4BRK3wJ7ARHiFNdjUfdEre_E_zv1z3Sq5ECMxjuOn_iZhAO2FX-Uh4N9cwzlQbaxCC1Xnqcdy14G0XxGAwE6hgu-6tkfTrHnfPT2d2r98OmmJRpxohNQE-5SoIyqiodcQr8txKh7NeeOPPc1JPMuqQVCD00EI42iqEjnV08FDsFO1uTxp7pLVT5iDtnUF4VFwrvSxosyxvkoelDD2vkDjzVQ';
+export const BRAND_LOGO_URL =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%2300D2FF"/><stop offset="50%" stop-color="%230B74DE"/><stop offset="100%" stop-color="%230A192F"/></linearGradient><linearGradient id="dg" x1="20%" y1="10%" x2="80%" y2="90%"><stop offset="0%" stop-color="%23E0F7FF"/><stop offset="40%" stop-color="%2338BDF8"/><stop offset="100%" stop-color="%230284C7"/></linearGradient><radialGradient id="rg" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="%2300D2FF" stop-opacity="0.3"/><stop offset="100%" stop-color="%2300D2FF" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(%23rg)"/><path d="M50 6 L84 20 V50 C84 72 69 88 50 94 C31 88 16 72 16 50 V20 L50 6 Z" fill="url(%23sg)" stroke="%2300D2FF" stroke-width="2.5"/><path d="M50 14 L76 25 V49 C76 67 64 80 50 85 C36 80 24 67 24 49 V25 L50 14 Z" fill="%230B1E36" opacity="0.9"/><path d="M50 25 C50 25 67 50 67 61 C67 70.4 59.4 78 50 78 C40.6 78 33 70.4 33 61 C33 50 50 25 50 25 Z" fill="url(%23dg)"/><path d="M44 45 C44 45 40 54 40 60 C40 63 41.5 65 43 66" stroke="%23FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/><circle cx="50" cy="62" r="3" fill="%23FFFFFF"/></svg>';
+
+export const PLACEHOLDER_PRODUCT_IMAGE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" fill="none"><rect width="400" height="400" fill="%230A192F"/><rect x="20" y="20" width="360" height="360" rx="24" stroke="%2300D2FF" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/><path d="M200 130c-25 35-50 70-50 100 0 28 22 50 50 50s50-22 50-50c0-30-25-65-50-100z" fill="%2300D2FF" opacity="0.25"/><path d="M200 160c-15 22-30 44-30 65 0 17 13 30 30 30s30-13 30-30c0-21-15-43-30-65z" fill="%2300D2FF"/><text x="200" y="315" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" fill="%23E0F2FE">Aqua Puro Zone Certified</text><text x="200" y="338" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="%2338BDF8">Sira Gate Warehouse • Tumakuru</text></svg>';
 
 export const INITIAL_LEADS: Lead[] = [
   {
@@ -103,7 +107,7 @@ export const INITIAL_LEADS: Lead[] = [
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 'prod-01',
-    name: 'AquaPure Copper Max Pro',
+    name: 'AquaPure Copper Max Pro RO+UV',
     category: 'Water Purifier',
     brand: 'Aqua Puro Zone',
     price: 16499,
@@ -113,22 +117,25 @@ export const INITIAL_PRODUCTS: Product[] = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWUVE7DaOBBSuPezP7wcO14Xex0UztO4006u2e2ZeS6y4JktEhCZtgM10E9-VKyAae8cjxtBERTcKjLdWcOq5K1kNrxzP1lwo06VWwzkLEAsD3DDRuLZC0JN582KlztwFYwmxanszCaT9I5ShBkM6Z5VdJkaJ9KNEi4fAdEUHaVT3K9R0nP7rN9EUddAP0oqDkRdteJdCZT3O8F_0igxecxXmksJTrI0UJ4MD6bd2yjevqxVwDD8cg',
     inStock: true,
     visibleOnStorefront: true,
+    is_user_uploaded: false,
+    productColor: 'Deep Black & Active Copper',
+    productFinish: 'High-Gloss Toughened Glass with Copper Chamber',
     stockQuantity: 8,
     featured: true,
     targetWaterType: 'Borewell',
     description: '7-stage purification with 100 GPD high-recovery membrane, copper infusion chamber, and digital TDS purity readout for up to 2000 PPM water.',
-    features: ['100 GPD Ro Membrane', 'Active Copper Cartridge', 'Digital TDS LED Indicator', 'Leak-proof brass inlet']
+    features: ['100 GPD RO Membrane', 'Active Copper Cartridge', 'Digital TDS LED Indicator', 'Leak-proof brass inlet']
   },
   {
     id: 'prod-02',
-    name: 'Auto-Soft 2000L Resin Plant',
-    category: 'Whole House Softener',
+    name: 'Auto-Soft 2000L Whole House Softener',
+    category: 'Water Softener',
     brand: 'Aqua Puro Zone Pro',
     price: 28500,
     capacity: '2000 Litres/Hour Continuous Ion-Exchange Flow',
     mountType: 'Floor Standing / Overhead Tank Inflow Line',
     tags: ['#hard_water', '#whole_bungalow', '#floor_standing', '#anti_scaling', '#automatic_backwash'],
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB2sS6I8zggyBQpXlJu85_c3ACTlS2eQ00WmQJAfJk0nYV3c6MN-rOqpttc53WcXE0rcrguZ65tF55IdK18yeDlK1y6MPK_PC7ulrwzyDwuJHWR9dIGtYGwaK2o3JjMi2cYmKfefGPzSNPxftC1mSQ3ScJiTSpZiRKF4L5tsFCUIIioB5pMH82jqDGmVvmQ14HkJqNr1XXhj8ZTQgJKPTpzpjwnA0MKelCNYVjcoyhZz-ZhWQ7OlYYu',
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
     inStock: true,
     visibleOnStorefront: true,
     stockQuantity: 4,
@@ -139,14 +146,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-03',
-    name: 'Vortex 1400 Suction Hood',
+    name: 'Vortex 1400 Suction Hood Chimney',
     category: 'Kitchen Chimney',
     brand: 'AeroClean Tumakuru',
     price: 14200,
     capacity: '1400 m³/hr Heavy Deep Fry Airflow Extraction',
     mountType: 'Wall-Mount 60cm Stainless Glass Canopy',
     tags: ['#heavy_smoke', '#wall_mount', '#autoclean', '#motion_sensor', '#baffle_filter'],
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGfWLSoYHu53dHkGs1mb1qT1ahg_XudjJ84mmP9MjcG8F9yo3IzUYoFV9RN8tSrcOn9fq1EWp8bwQdidJfTxo2Mnp3dTDPjD9UgWer5D6F2-yutTAfK53sI6CmVBD9AA7Gf22w7EAThqr3XxhE_LzwBITfIGSI59j7ie8Gkn_aQN7dD9UY2gJvqZR80kWfEVb9Y3yHLLmjsMdZjjj9-FgW9-oC0jaeTkdrzEHK2D5rSm3q9a1WqHVn',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
     inStock: true,
     visibleOnStorefront: true,
     stockQuantity: 5,
@@ -164,7 +171,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     capacity: '8.5L Dual Stage Gravity Storage',
     mountType: 'Wall-Mounted or Tabletop',
     tags: ['#kaveri_water', '#low_tds', '#energy_saver', '#uv_sterilization'],
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWUVE7DaOBBSuPezP7wcO14Xex0UztO4006u2e2ZeS6y4JktEhCZtgM10E9-VKyAae8cjxtBERTcKjLdWcOq5K1kNrxzP1lwo06VWwzkLEAsD3DDRuLZC0JN582KlztwFYwmxanszCaT9I5ShBkM6Z5VdJkaJ9KNEi4fAdEUHaVT3K9R0nP7rN9EUddAP0oqDkRdteJdCZT3O8F_0igxecxXmksJTrI0UJ4MD6bd2yjevqxVwDD8cg',
+    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80',
     inStock: true,
     visibleOnStorefront: true,
     stockQuantity: 6,
@@ -175,21 +182,75 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-05',
-    name: 'AquaPro Commercial 50 LPH RO',
+    name: 'AquaPro Commercial 50 LPH RO Plant',
     category: 'Commercial RO',
     brand: 'Aqua Puro Zone Pro',
     price: 34999,
     capacity: '50 Litres/Hour High Volume Plant',
     mountType: 'Floor Stainless Steel Skid',
     tags: ['#commercial', '#restaurants', '#schools', '#high_capacity'],
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB2sS6I8zggyBQpXlJu85_c3ACTlS2eQ00WmQJAfJk0nYV3c6MN-rOqpttc53WcXE0rcrguZ65tF55IdK18yeDlK1y6MPK_PC7ulrwzyDwuJHWR9dIGtYGwaK2o3JjMi2cYmKfefGPzSNPxftC1mSQ3ScJiTSpZiRKF4L5tsFCUIIioB5pMH82jqDGmVvmQ14HkJqNr1XXhj8ZTQgJKPTpzpjwnA0MKelCNYVjcoyhZz-ZhWQ7OlYYu',
-    inStock: false,
-    visibleOnStorefront: false,
-    stockQuantity: 0,
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+    inStock: true,
+    visibleOnStorefront: true,
+    stockQuantity: 3,
     featured: false,
     targetWaterType: 'All',
     description: 'Heavy duty twin 300 GPD membranes with Kemflo booster pump, suitable for schools, clinics, and hotels in Tumakuru.',
     features: ['Twin 300 GPD Membranes', 'SS 304 Skid Framework', 'Dual Pressure Gauges', 'Low Pressure Auto Cut-Off']
+  },
+  {
+    id: 'prod-06',
+    name: 'AquaSol ETC 200L Solar Water Heater',
+    category: 'Solar System',
+    brand: 'Aqua Puro Zone Solar',
+    price: 24500,
+    capacity: '200 Litres/Day Pressurized Hot Water',
+    mountType: 'Rooftop South-Facing Mounting Frame',
+    tags: ['#solar', '#water_heater', '#rooftop', '#zero_electricity', '#pressurized'],
+    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    inStock: true,
+    visibleOnStorefront: true,
+    stockQuantity: 4,
+    featured: true,
+    targetWaterType: 'All',
+    description: 'High-absorption three-target evacuated glass tubes with SUS 304 food-grade stainless steel inner tank and weather-proof zinc alume outer shell.',
+    features: ['3-Target Vacuum Tubes', 'SUS 304 Food Grade Tank', 'PUF Insulation 50mm', 'Corrosion Free Stand']
+  },
+  {
+    id: 'prod-07',
+    name: 'AquaPure Hydro Under-Sink RO',
+    category: 'RO System',
+    brand: 'Aqua Puro Zone',
+    price: 18990,
+    capacity: '10L Hydrostatic Tank With Swan Neck Faucet',
+    mountType: 'Concealed Under-Sink Cabinet',
+    tags: ['#under_sink', '#modular_kitchen', '#aesthetic', '#swan_faucet'],
+    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
+    inStock: true,
+    visibleOnStorefront: true,
+    stockQuantity: 5,
+    featured: true,
+    targetWaterType: 'Borewell',
+    description: 'Completely hidden under kitchen sink counter with designer chrome gooseneck tap on granite top. Zero wall clutter.',
+    features: ['Concealed Hydrostatic Tank', 'Designer Swan Neck Spout', 'Auto Leak Detection Sensor', 'High Flow Membrane']
+  },
+  {
+    id: 'prod-08',
+    name: 'SolarPro 3kW Residential On-Grid PV System',
+    category: 'Solar System',
+    brand: 'Aqua Puro Zone Solar',
+    price: 145000,
+    capacity: '12-14 Units Daily Solar Power Generation',
+    mountType: 'Rooftop Elevated Anodized Aluminium Structure',
+    tags: ['#solar_pv', '#bescom_net_meter', '#zero_bills', '#rooftop'],
+    image: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=800&q=80',
+    inStock: true,
+    visibleOnStorefront: true,
+    stockQuantity: 2,
+    featured: false,
+    targetWaterType: 'All',
+    description: 'Mono PERC half-cut high-efficiency solar modules with BIS certified smart grid-tie inverter for BESCOM net-metering in Tumakuru.',
+    features: ['540W Mono PERC Panels', 'Smart WiFi Solar Inverter', 'BESCOM Net-Metering Ready', '25-Year Performance Guarantee']
   }
 ];
 

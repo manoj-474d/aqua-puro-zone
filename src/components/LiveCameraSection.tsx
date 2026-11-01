@@ -18,6 +18,8 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
+  const [isStartingCamera, setIsStartingCamera] = useState<boolean>(false);
+  const [flashActive, setFlashActive] = useState<boolean>(false);
 
   // Customer inputs
   const [customerName, setCustomerName] = useState<string>('');
@@ -37,10 +39,20 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
 
   const stopCamera = () => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current.getTracks().forEach((track) => {
+        try {
+          track.stop();
+        } catch {
+          // ignore
+        }
+      });
       streamRef.current = null;
     }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
     setIsCameraActive(false);
+    setIsStartingCamera(false);
   };
 
   useEffect(() => {
@@ -49,32 +61,80 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
     };
   }, []);
 
-  const startCamera = async () => {
+  // When camera becomes active, ensure stream is bound to the video element
+  useEffect(() => {
+    if (isCameraActive && videoRef.current && streamRef.current) {
+      const vid = videoRef.current;
+      if (vid.srcObject !== streamRef.current) {
+        vid.srcObject = streamRef.current;
+      }
+      vid.play().catch((err) => {
+        console.warn('Video play interrupted or requires user action:', err);
+      });
+    }
+  }, [isCameraActive]);
+
+  const startCamera = async (overrideFacing?: 'environment' | 'user') => {
     setCameraError(null);
+    setIsStartingCamera(true);
+    const targetFacing = overrideFacing || facingMode;
+
     try {
       if (streamRef.current) {
-        stopCamera();
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-        audio: false,
-      });
+      let stream: MediaStream | null = null;
+
+      // 1. Try standard ideal rear/front camera constraints
+      if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: { ideal: targetFacing },
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+            audio: false,
+          });
+        } catch {
+          // 2. Fallback to basic facingMode constraint
+          try {
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: { facingMode: targetFacing },
+              audio: false,
+            });
+          } catch {
+            // 3. Fallback to any available video stream
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: true,
+              audio: false,
+            });
+          }
+        }
+      }
+
+      if (!stream) {
+        throw new Error('No camera stream could be initialized');
+      }
 
       streamRef.current = stream;
+      setIsCameraActive(true);
+      setIsStartingCamera(false);
+
+      // Connect to video element if it's already mounted
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        await videoRef.current.play();
+        videoRef.current.play().catch(console.warn);
       }
-      setIsCameraActive(true);
     } catch (err: any) {
-      console.warn('Camera access unavailable:', err);
-      setCameraError('Camera access unavailable on this device. You can upload any kitchen/water photo or click the sample spaces below.');
+      console.warn('WebRTC camera unavailable or permission denied:', err);
+      setIsStartingCamera(false);
       setIsCameraActive(false);
+      setCameraError(
+        'Webcam access blocked or not supported in this browser window. Use "Native Phone Camera" or upload a photo below!'
+      );
     }
   };
 
@@ -82,20 +142,25 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
     const nextMode = facingMode === 'environment' ? 'user' : 'environment';
     setFacingMode(nextMode);
     if (isCameraActive) {
-      setTimeout(() => startCamera(), 100);
+      startCamera(nextMode);
     }
   };
 
   const takeSnapshot = () => {
     if (!videoRef.current) return;
     const video = videoRef.current;
+
+    // Trigger visual shutter flash
+    setFlashActive(true);
+    setTimeout(() => setFlashActive(false), 200);
+
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth || 640;
     canvas.height = video.videoHeight || 480;
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
       setCapturedPhoto(dataUrl);
       stopCamera();
     }
@@ -235,13 +300,26 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
 
             {/* Viewfinder Canvas with High-Tech Laser Beam & Bracket Overlay */}
             <div className="relative w-full h-80 sm:h-96 rounded-2xl bg-[#0a1120] overflow-hidden flex items-center justify-center border-2 border-[#005cb3]/40 shadow-inner group">
+              {flashActive && (
+                <div className="absolute inset-0 bg-white z-50 animate-out fade-out duration-200 pointer-events-none" />
+              )}
+
               {isCameraActive ? (
                 <>
                   <video
-                    ref={videoRef}
+                    ref={(el) => {
+                      videoRef.current = el;
+                      if (el && streamRef.current && el.srcObject !== streamRef.current) {
+                        el.srcObject = streamRef.current;
+                        el.play().catch(console.warn);
+                      }
+                    }}
                     autoPlay
                     playsInline
                     muted
+                    onLoadedMetadata={() => {
+                      videoRef.current?.play().catch(console.warn);
+                    }}
                     className="w-full h-full object-cover"
                   />
 
@@ -273,22 +351,25 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
                   {/* Camera Control Actions */}
                   <div className="absolute bottom-5 inset-x-0 flex items-center justify-center gap-4 z-20">
                     <button
+                      type="button"
                       onClick={toggleFacingMode}
-                      className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/70 transition-colors border border-white/20"
-                      title="Flip Camera"
+                      className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/80 transition-colors border border-white/20 cursor-pointer shadow-md"
+                      title="Flip Camera (Front/Rear)"
                     >
                       <span className="material-symbols-outlined text-[22px]">flip_camera_ios</span>
                     </button>
                     <button
+                      type="button"
                       onClick={takeSnapshot}
-                      className="w-18 h-18 rounded-full bg-white text-[#005cb3] flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.8)] hover:scale-105 active:scale-95 transition-transform ring-4 ring-[#005cb3]"
-                      title="Snap Live Photo"
+                      className="w-20 h-20 rounded-full bg-white text-[#005cb3] flex items-center justify-center shadow-[0_0_35px_rgba(255,255,255,0.9)] hover:scale-105 active:scale-95 transition-transform ring-4 ring-[#005cb3] cursor-pointer"
+                      title="Click / Capture Photo Now"
                     >
-                      <span className="material-symbols-outlined text-[36px]">camera</span>
+                      <span className="material-symbols-outlined text-[40px]">camera</span>
                     </button>
                     <button
+                      type="button"
                       onClick={stopCamera}
-                      className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/70 transition-colors border border-white/20"
+                      className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/80 transition-colors border border-white/20 cursor-pointer shadow-md"
                       title="Close Camera"
                     >
                       <span className="material-symbols-outlined text-[22px]">close</span>
@@ -358,17 +439,39 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
                   <p className="text-[13px] text-slate-300 max-w-sm mt-1 mb-5">
                     Launch your phone camera or webcam to inspect plumbing, countertop clearance, or tap water sample.
                   </p>
-                  <div className="flex flex-wrap items-center justify-center gap-3">
+
+                  {/* Primary Camera Action Options */}
+                  <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-md">
+                    {/* Option A: Direct WebRTC Camera */}
                     <button
-                      onClick={startCamera}
-                      className="px-5 py-2.5 bg-[#005cb3] hover:bg-[#0b74de] text-white rounded-xl text-[13px] font-bold flex items-center gap-2 transition-all shadow-md hover:scale-105"
+                      type="button"
+                      onClick={() => startCamera()}
+                      disabled={isStartingCamera}
+                      className="px-5 py-3 bg-[#005cb3] hover:bg-[#0b74de] text-white rounded-xl text-[13px] font-bold flex items-center gap-2 transition-all shadow-md hover:scale-105 cursor-pointer disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[20px]">videocam</span>
-                      <span>Launch Live Camera</span>
+                      <span className="material-symbols-outlined text-[20px]">
+                        {isStartingCamera ? 'sync' : 'videocam'}
+                      </span>
+                      <span>{isStartingCamera ? 'Opening Camera...' : 'Launch Live Camera'}</span>
                     </button>
-                    <label className="px-5 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-[13px] font-bold flex items-center gap-2 cursor-pointer transition-all border border-white/20">
-                      <span className="material-symbols-outlined text-[20px]">upload_file</span>
-                      <span>Upload Photo</span>
+
+                    {/* Option B: Native Device Camera (opens phone camera shutter directly) */}
+                    <label className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-[13px] font-bold flex items-center gap-2 cursor-pointer transition-all shadow-md hover:scale-105">
+                      <span className="material-symbols-outlined text-[20px]">photo_camera</span>
+                      <span>Click Photo with Phone Camera</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {/* Option C: Upload from Gallery / Files */}
+                    <label className="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-[12px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all border border-white/20">
+                      <span className="material-symbols-outlined text-[18px]">folder_open</span>
+                      <span>Upload from Device</span>
                       <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                     </label>
                   </div>
@@ -377,9 +480,24 @@ export const LiveCameraSection: React.FC<LiveCameraSectionProps> = ({
             </div>
 
             {cameraError && (
-              <p className="text-[12px] text-[#ba1a1a] mt-2 bg-[#ffdad6] p-2.5 rounded-xl font-medium">
-                {cameraError}
-              </p>
+              <div className="mt-3 p-3 bg-[#ffdad6] border border-[#ba1a1a]/30 rounded-xl text-[12px] text-[#410002] flex items-start gap-2">
+                <span className="material-symbols-outlined text-[18px] text-[#ba1a1a] shrink-0 mt-0.5">info</span>
+                <div className="flex-1">
+                  <p className="font-semibold">{cameraError}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <label className="px-3 py-1.5 bg-[#006c2e] hover:bg-[#00883c] text-white rounded-lg text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer shadow-xs">
+                      <span className="material-symbols-outlined text-[15px]">photo_camera</span>
+                      <span>Open Phone Camera Shutter</span>
+                      <input type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="hidden" />
+                    </label>
+                    <label className="px-3 py-1.5 bg-white text-[#131b2e] border border-[#dae2fd] hover:bg-slate-50 rounded-lg text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer shadow-xs">
+                      <span className="material-symbols-outlined text-[15px]">image</span>
+                      <span>Browse Photo Gallery</span>
+                      <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                    </label>
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* Quick Demo Presets */}
